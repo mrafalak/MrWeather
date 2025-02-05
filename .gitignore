@@ -34,9 +34,5 @@ out/
 **/*.ap_
 **/*.aab
 
-# Release and Debug builds
-**/release/
-**/debug/
-
 # Logs and temporary files
 *.log
