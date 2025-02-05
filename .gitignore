@@ -1,0 +1,42 @@
+# Android Studio / IntelliJ IDEA files
+*.iml
+.gradle
+/local.properties
+.idea/
+.idea/caches/
+.idea/libraries/
+.idea/modules.xml
+.idea/workspace.xml
+.idea/navEditor.xml
+.idea/assetWizardSettings.xml
+
+# OS-specific files
+.DS_Store
+
+# Build files
+**/build/
+captures/
+.externalNativeBuild/
+.cxx/
+
+# Compiled files
+*.dex
+*.class
+
+# Java/Kotlin generated files
+bin/
+gen/
+out/
+
+# APKs, AARs, and App Bundles
+**/*.apk
+**/*.aar
+**/*.ap_
+**/*.aab
+
+# Release and Debug builds
+**/release/
+**/debug/
+
+# Logs and temporary files
+*.log
