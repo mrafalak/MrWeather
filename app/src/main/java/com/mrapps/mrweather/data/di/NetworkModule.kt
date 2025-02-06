@@ -1,4 +1,4 @@
-package com.mrapps.mrweather.di
+package com.mrapps.mrweather.data.di
 
 import com.mrapps.mrweather.BuildConfig
 import com.mrapps.mrweather.Config

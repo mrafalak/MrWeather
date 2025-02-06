@@ -66,6 +66,7 @@ dependencies {
     implementation(libs.bundles.androidx)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.bundles.compose)
+    implementation(libs.androidx.navigation.compose)
     implementation(libs.bundles.networking)
     implementation(libs.bundles.di)
     testImplementation(libs.junit)
