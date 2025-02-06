@@ -1,0 +1,11 @@
+package com.mrapps.mrweather.domain.model
+
+
+data class AdministrativeArea(
+    val id: String,
+    val localizedName: String,
+    val englishName: String,
+    val localizedType: String,
+    val englishType: String,
+    val countryId: String
+)
