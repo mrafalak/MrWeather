@@ -11,14 +11,12 @@ data class AdministrativeAreaDto(
     @SerializedName("EnglishType") val englishType: String,
     @SerializedName("CountryID") val countryId: String,
 ) {
-    fun toAdministrativeArea(): AdministrativeArea {
-        return AdministrativeArea(
-            id = this.id,
-            localizedName = this.localizedName,
-            englishName = this.englishName,
-            localizedType = this.localizedType,
-            englishType = this.englishType,
-            countryId = this.countryId
-        )
-    }
+    fun toAdministrativeArea(): AdministrativeArea = AdministrativeArea(
+        id = this.id,
+        localizedName = this.localizedName,
+        englishName = this.englishName,
+        localizedType = this.localizedType,
+        englishType = this.englishType,
+        countryId = this.countryId
+    )
 }
