@@ -1,7 +1,7 @@
 package com.mrapps.mrweather
 
 import android.app.Application
-import com.mrapps.mrweather.di.networkModule
+import com.mrapps.mrweather.data.di.networkModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 

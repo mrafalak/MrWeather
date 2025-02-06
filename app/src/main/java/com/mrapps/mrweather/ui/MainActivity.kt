@@ -1,9 +1,10 @@
-package com.mrapps.mrweather
+package com.mrapps.mrweather.ui
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import com.mrapps.mrweather.ui.navigation.AppNavigation
 import com.mrapps.mrweather.ui.theme.MrWeatherTheme
 
 class MainActivity : ComponentActivity() {
@@ -11,7 +12,9 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            MrWeatherTheme {}
+            MrWeatherTheme {
+                AppNavigation()
+            }
         }
     }
 }
