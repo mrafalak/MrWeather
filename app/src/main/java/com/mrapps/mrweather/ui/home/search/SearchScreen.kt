@@ -27,7 +27,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import com.mrapps.mrweather.R
-import com.mrapps.mrweather.domain.model.City
+import com.mrapps.mrweather.domain.model.location.City
 import com.mrapps.mrweather.ui.home.search.components.SearchTextField
 import com.mrapps.mrweather.ui.theme.MrWeatherTheme
 import kotlinx.coroutines.launch
@@ -145,7 +145,7 @@ private fun SearchedCities(
 
 @PreviewLightDark
 @Composable
-fun SearchScreenContentPreview(modifier: Modifier = Modifier) {
+fun SearchScreenContentPreview() {
     MrWeatherTheme {
         SearchScreenContent(
             state = SearchScreenState(
@@ -162,7 +162,7 @@ fun SearchScreenContentPreview(modifier: Modifier = Modifier) {
 
 @PreviewLightDark
 @Composable
-fun SearchScreenContentLoadingPreview(modifier: Modifier = Modifier) {
+fun SearchScreenContentLoadingPreview() {
     MrWeatherTheme {
         SearchScreenContent(
             state = SearchScreenState(

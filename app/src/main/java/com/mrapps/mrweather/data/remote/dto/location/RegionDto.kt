@@ -1,7 +1,7 @@
-package com.mrapps.mrweather.data.remote.dto
+package com.mrapps.mrweather.data.remote.dto.location
 
 import com.google.gson.annotations.SerializedName
-import com.mrapps.mrweather.domain.model.Region
+import com.mrapps.mrweather.domain.model.location.Region
 
 data class RegionDto(
     @SerializedName("ID") val id: String,

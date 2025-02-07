@@ -1,4 +1,4 @@
-package com.mrapps.mrweather.domain.model
+package com.mrapps.mrweather.domain.model.location
 
 
 data class AdministrativeArea(
