@@ -20,10 +20,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
-import com.mrapps.mrweather.domain.model.AdministrativeArea
-import com.mrapps.mrweather.domain.model.City
-import com.mrapps.mrweather.domain.model.Country
-import com.mrapps.mrweather.domain.model.Region
+import com.mrapps.mrweather.domain.model.location.AdministrativeArea
+import com.mrapps.mrweather.domain.model.location.City
+import com.mrapps.mrweather.domain.model.location.Country
+import com.mrapps.mrweather.domain.model.location.Region
 import com.mrapps.mrweather.ui.theme.MrWeatherTheme
 
 @Composable

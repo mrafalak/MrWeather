@@ -1,6 +1,6 @@
 package com.mrapps.mrweather.ui.home.search
 
-import com.mrapps.mrweather.domain.model.City
+import com.mrapps.mrweather.domain.model.location.City
 
 sealed class SearchAction {
     data class QueryChanged(val query: String) : SearchAction()
