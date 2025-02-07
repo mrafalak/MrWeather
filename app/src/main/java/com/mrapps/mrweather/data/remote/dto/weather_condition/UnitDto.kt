@@ -1,8 +1,8 @@
 package com.mrapps.mrweather.data.remote.dto.weather_condition
 
 import com.google.gson.annotations.SerializedName
-import com.mrapps.mrweather.domain.model.units.Imperial
-import com.mrapps.mrweather.domain.model.units.Metric
+import com.mrapps.mrweather.domain.model.units.ImperialFactory
+import com.mrapps.mrweather.domain.model.units.MetricFactory
 import com.mrapps.mrweather.domain.model.units.Unit
 
 data class UnitDto(
@@ -10,11 +10,11 @@ data class UnitDto(
     @SerializedName("Metric") val metric: MetricDto
 ) {
     fun toUnit(): Unit = Unit(
-        imperial = Imperial.fromUnitType(
+        imperial = ImperialFactory.fromUnitType(
             type = this.imperial.unitType,
             value = this.imperial.value
         ),
-        metric = Metric.fromUnitType(
+        metric = MetricFactory.fromUnitType(
             type = this.metric.unitType,
             value = this.metric.value
         )

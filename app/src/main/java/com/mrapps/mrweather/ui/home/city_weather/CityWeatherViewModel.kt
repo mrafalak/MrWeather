@@ -27,7 +27,7 @@ class CityWeatherViewModel(private val weatherRepository: WeatherRepository) : V
                 when (result) {
                     is Result.Success -> {
                         _state.value = state.value.copy(
-                            conditions = result.data,
+                            weatherConditions = result.data,
                             isConditionsLoading = false
                         )
                     }

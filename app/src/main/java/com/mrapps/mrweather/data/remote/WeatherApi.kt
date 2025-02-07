@@ -1,7 +1,7 @@
 package com.mrapps.mrweather.data.remote
 
 import com.mrapps.mrweather.data.remote.dto.location.CityDto
-import com.mrapps.mrweather.data.remote.dto.weather_condition.CurrentConditionsDto
+import com.mrapps.mrweather.data.remote.dto.weather_condition.WeatherConditionsDto
 import com.mrapps.mrweather.data.remote.util.LanguageEnum
 import com.mrapps.mrweather.data.remote.util.SearchCityAlias
 import retrofit2.http.GET
@@ -27,5 +27,5 @@ interface WeatherApi {
         @Path("locationKey") locationKey: String,
         @Query("language") language: LanguageEnum = DEFAULT_LANGUAGE,
         @Query("details") details: Boolean = true,
-    ): List<CurrentConditionsDto>
+    ): List<WeatherConditionsDto>
 }

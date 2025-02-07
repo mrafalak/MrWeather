@@ -1,10 +1,10 @@
 package com.mrapps.mrweather.data.remote.dto.weather_condition
 
 import com.google.gson.annotations.SerializedName
-import com.mrapps.mrweather.domain.model.weather_condition.CurrentConditions
+import com.mrapps.mrweather.domain.model.weather_condition.WeatherConditions
 import com.mrapps.mrweather.domain.model.weather_condition.PressureTendency
 
-data class CurrentConditionsDto(
+data class WeatherConditionsDto(
     @SerializedName("WeatherText") val weatherText: String,
     @SerializedName("WeatherIcon") val weatherIcon: Int,
     @SerializedName("Temperature") val temperature: UnitDto,
@@ -18,7 +18,7 @@ data class CurrentConditionsDto(
     @SerializedName("LocalObservationDateTime") val localObservationDateTime: String,
     @SerializedName("EpochTime") val epochTime: Int
 ) {
-    fun toCurrentConditions(): CurrentConditions = CurrentConditions(
+    fun toWeatherConditions(): WeatherConditions = WeatherConditions(
         weatherText = this.weatherText,
         weatherIcon = this.weatherIcon,
         temperature = this.temperature.toUnit(),
