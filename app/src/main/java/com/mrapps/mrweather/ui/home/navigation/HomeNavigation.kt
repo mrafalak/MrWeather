@@ -20,22 +20,20 @@ fun NavGraphBuilder.addHomeNavGraph(navController: NavHostController) {
     }
     composable(HomeRoutes.Search.route) {
         SearchScreen(
-            navigateToWeatherDetails = { city ->
-                navController.navigate(HomeRoutes.CityWeather.createRoute(city))
+            navigateToWeatherDetails = { cityId ->
+                navController.navigate(HomeRoutes.CityWeather.createRoute(cityId))
             },
-            navigateUp = {
+            navigateBack = {
                 navController.popBackStack()
             },
         )
     }
     composable(HomeRoutes.CityWeather.route) { backStackEntry ->
         CityWeatherScreen(
-            city = backStackEntry.arguments?.getString("city") ?: DEFAULT_CITY,
-            navigateUp = {
+            cityId = backStackEntry.arguments?.getString(ARGUMENT_CITY_ID) ?: DEFAULT_CITY_ID,
+            navigateBack = {
                 navController.popBackStack()
             }
         )
     }
 }
-
-private const val DEFAULT_CITY = "Unknown"

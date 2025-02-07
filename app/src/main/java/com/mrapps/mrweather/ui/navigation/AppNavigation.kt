@@ -12,7 +12,10 @@ fun AppNavigation() {
     val navController = rememberNavController()
 
     NavHost(navController = navController, startDestination = GraphRoutes.Home.route) {
-        navigation(startDestination = HomeRoutes.SavedCities.route, route = GraphRoutes.Home.route) {
+        navigation(
+            route = GraphRoutes.Home.route,
+            startDestination = HomeRoutes.SavedCities.route
+        ) {
             addHomeNavGraph(navController)
         }
     }

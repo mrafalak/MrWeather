@@ -5,8 +5,8 @@ import androidx.compose.runtime.Composable
 
 @Composable
 fun CityWeatherScreen(
-    city: String,
-    navigateUp: () -> Unit
+    cityId: String,
+    navigateBack: () -> Unit
 ) {
     CityWeatherContent()
 }
