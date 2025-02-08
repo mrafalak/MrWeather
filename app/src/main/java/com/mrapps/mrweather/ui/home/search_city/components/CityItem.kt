@@ -1,4 +1,4 @@
-package com.mrapps.mrweather.ui.home.search
+package com.mrapps.mrweather.ui.home.search_city.components
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -83,7 +83,7 @@ fun CityItemPreview(modifier: Modifier = Modifier) {
 }
 
 val cityPreview = City(
-    id = "Warszawa",
+    id = "274663",
     localizedName = "Warszawa",
     englishName = "Warsaw",
     administrativeArea = AdministrativeArea(
@@ -92,7 +92,6 @@ val cityPreview = City(
         englishName = "Masovia",
         localizedType = "Województwo",
         englishType = "Voivodeship",
-        countryId = "PL"
     ),
     country = Country(
         id = "1", localizedName = "Polska", englishName = "Poland"

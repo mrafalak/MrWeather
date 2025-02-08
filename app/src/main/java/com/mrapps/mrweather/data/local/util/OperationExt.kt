@@ -1,12 +1,12 @@
-package com.mrapps.mrweather.data.remote
+package com.mrapps.mrweather.data.local.util
 
 import com.mrapps.mrweather.domain.model.util.Result
 
-suspend fun <T> safeApiCall(
-    apiCall: suspend () -> T
+suspend fun <T> safeDatabaseOperation(
+    operation: suspend () -> T
 ): Result<T> {
     return try {
-        Result.Success(apiCall())
+        Result.Success(operation())
     } catch (e: Exception) {
         Result.Exception(e)
     }

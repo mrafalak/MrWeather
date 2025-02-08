@@ -36,3 +36,6 @@ out/
 
 # Logs and temporary files
 *.log
+
+# Database Schemas
+/app/schemas/

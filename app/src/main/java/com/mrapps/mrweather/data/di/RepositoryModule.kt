@@ -7,6 +7,6 @@ import com.mrapps.mrweather.domain.WeatherRepository
 import org.koin.dsl.module
 
 val repositoryModule = module {
-    single<CityRepository> { CityRepositoryImpl(get()) }
+    single<CityRepository> { CityRepositoryImpl(get(), get(), get()) }
     single<WeatherRepository> { WeatherRepositoryImpl(get()) }
 }

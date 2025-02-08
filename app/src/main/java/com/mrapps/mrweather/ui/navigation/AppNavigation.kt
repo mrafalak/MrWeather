@@ -14,7 +14,7 @@ fun AppNavigation() {
     NavHost(navController = navController, startDestination = GraphRoutes.Home.route) {
         navigation(
             route = GraphRoutes.Home.route,
-            startDestination = HomeRoutes.SavedCities.route
+            startDestination = HomeRoutes.Search.route
         ) {
             addHomeNavGraph(navController)
         }

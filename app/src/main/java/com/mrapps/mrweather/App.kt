@@ -1,6 +1,7 @@
 package com.mrapps.mrweather
 
 import android.app.Application
+import com.mrapps.mrweather.data.di.databaseModule
 import com.mrapps.mrweather.data.di.networkModule
 import com.mrapps.mrweather.data.di.repositoryModule
 import com.mrapps.mrweather.ui.home.di.homeModule
@@ -14,7 +15,7 @@ class App : Application() {
 
         startKoin {
             androidContext(this@App)
-            modules(listOf(repositoryModule, networkModule, homeModule))
+            modules(listOf(repositoryModule, databaseModule, networkModule, homeModule))
         }
     }
 }
