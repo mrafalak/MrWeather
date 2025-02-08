@@ -4,4 +4,5 @@
     <string name="clear_text_ic">Clear text</string>
     <string name="search_ic">Search</string>
     <string name="navigate_back_ic">Navigate back</string>
+    <string name="recent">Recent</string>
 </resources>

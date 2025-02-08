@@ -1,4 +1,4 @@
-package com.mrapps.mrweather.ui.home.search.components
+package com.mrapps.mrweather.ui.home.search_city.components
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.KeyboardActions

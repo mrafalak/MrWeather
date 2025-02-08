@@ -1,7 +1,7 @@
 package com.mrapps.mrweather.data.repository
 
 import com.mrapps.mrweather.data.remote.WeatherApi
-import com.mrapps.mrweather.data.remote.safeApiCall
+import com.mrapps.mrweather.data.remote.util.safeApiCall
 import com.mrapps.mrweather.domain.WeatherRepository
 import com.mrapps.mrweather.domain.model.util.Result
 import com.mrapps.mrweather.domain.model.weather_condition.WeatherConditions

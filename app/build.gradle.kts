@@ -3,6 +3,9 @@ import java.util.Properties
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.androidx.room)
 }
 
 android {
@@ -20,6 +23,10 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+    }
+
+    room {
+        schemaDirectory("$projectDir/schemas")
     }
 
     buildTypes {
@@ -69,6 +76,8 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     implementation(libs.bundles.networking)
     implementation(libs.bundles.di)
+    implementation(libs.bundles.room)
+    ksp(libs.room.compiler)
     testImplementation(libs.junit)
     androidTestImplementation(libs.bundles.testing)
     androidTestImplementation(platform(libs.androidx.compose.bom))

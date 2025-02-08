@@ -7,5 +7,4 @@ data class AdministrativeArea(
     val englishName: String,
     val localizedType: String,
     val englishType: String,
-    val countryId: String
 )

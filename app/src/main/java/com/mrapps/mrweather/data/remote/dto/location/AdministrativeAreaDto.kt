@@ -17,6 +17,5 @@ data class AdministrativeAreaDto(
         englishName = this.englishName,
         localizedType = this.localizedType,
         englishType = this.englishType,
-        countryId = this.countryId
     )
 }
