@@ -7,5 +7,5 @@ import org.koin.dsl.module
 
 val homeModule = module {
     viewModel { SearchCityViewModel(get()) }
-    viewModel { CityWeatherViewModel(get()) }
+    viewModel { CityWeatherViewModel(get(), get()) }
 }

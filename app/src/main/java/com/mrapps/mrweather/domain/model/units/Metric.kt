@@ -12,7 +12,7 @@ enum class MetricUnit(val type: Int, val unit: String) {
     SPEED_KMH(7, "km/h"),
     TEMPERATURE(17, "C"),
     PRESSURE(14, "mb"),
-    UNKNOWN(-1, "UnsupportedUnit ")
+    UNKNOWN(-1, "???")
 }
 
 object MetricFactory {
