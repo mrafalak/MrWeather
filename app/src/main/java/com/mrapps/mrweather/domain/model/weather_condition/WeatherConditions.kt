@@ -1,6 +1,7 @@
 package com.mrapps.mrweather.domain.model.weather_condition
 
 import com.mrapps.mrweather.domain.model.units.Unit
+import java.time.LocalDateTime
 
 data class WeatherConditions(
     val weatherText: String,
@@ -13,6 +14,6 @@ data class WeatherConditions(
     val cloudCover: Int,
     val pressure: Unit,
     val pressureTendency: PressureTendency,
-    val localObservationDateTime: String,
+    val localObservationDateTime: LocalDateTime,
     val epochTime: Int
 )

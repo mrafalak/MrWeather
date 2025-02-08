@@ -3,6 +3,16 @@
     <string name="search_city_label">Search City…</string>
     <string name="clear_text_ic">Clear text</string>
     <string name="search_ic">Search</string>
+    <string name="warning_ic">"Warning</string>
     <string name="navigate_back_ic">Navigate back</string>
     <string name="recent">Recent</string>
+    <string name="city_weather_no_city_data_available">No city data available</string>
+    <string name="weather_conditions_no_data_available">No weather conditions available</string>
+    <string name="city_loading">Loading city…</string>
+    <string name="city_loading_warning">Failed to load city data</string>
+    <string name="temperature_label">Temperature:</string>
+    <string name="real_feel_label">Real Feel:</string>
+    <string name="wind_label">Wind:</string>
+    <string name="pressure_label">Pressure:</string>
+    <string name="cloud_cover_label">Cloud Cover:</string>
 </resources>

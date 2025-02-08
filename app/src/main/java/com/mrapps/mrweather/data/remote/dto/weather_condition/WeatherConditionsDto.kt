@@ -3,6 +3,7 @@ package com.mrapps.mrweather.data.remote.dto.weather_condition
 import com.google.gson.annotations.SerializedName
 import com.mrapps.mrweather.domain.model.weather_condition.WeatherConditions
 import com.mrapps.mrweather.domain.model.weather_condition.PressureTendency
+import com.mrapps.mrweather.domain.util.convertStringToLocalDateTime
 
 data class WeatherConditionsDto(
     @SerializedName("WeatherText") val weatherText: String,
@@ -29,7 +30,7 @@ data class WeatherConditionsDto(
         cloudCover = this.cloudCover,
         pressure = this.pressure.toUnit(),
         pressureTendency = PressureTendency.fromValue(this.pressureTendency.code),
-        localObservationDateTime = this.localObservationDateTime,
+        localObservationDateTime = convertStringToLocalDateTime(this.localObservationDateTime),
         epochTime = this.epochTime
     )
 }

@@ -3,6 +3,7 @@ package com.mrapps.mrweather.data.repository
 import com.mrapps.mrweather.data.local.dao.CityDao
 import com.mrapps.mrweather.data.local.dao.SearchHistoryDao
 import com.mrapps.mrweather.data.local.entity.search_history.SearchHistoryEntity
+import com.mrapps.mrweather.data.local.mappers.toCity
 import com.mrapps.mrweather.data.local.mappers.toCityEntity
 import com.mrapps.mrweather.data.local.mappers.toSearchHistoryWithCity
 import com.mrapps.mrweather.data.local.util.safeDatabaseOperation
@@ -51,6 +52,25 @@ class CityRepositoryImpl(
     override suspend fun getSearchHistory(): Flow<List<SearchHistoryWithCity>> {
         return searchHistoryDao.getAllSearchHistoryWithCities().map { searchHistoryWithCitiesData ->
             searchHistoryWithCitiesData.map { it.toSearchHistoryWithCity() }
+        }
+    }
+
+    override suspend fun getCityById(cityId: String): Flow<Result<City>> = flow {
+        val cityResult = safeDatabaseOperation {
+            cityDao.getCityById(cityId)?.toCity()
+        }
+
+        when (cityResult) {
+            is Result.Success -> {
+                val city = cityResult.data
+                if (city == null) {
+                    emit(Result.Exception(Exception("Unable to retrieve city data")))
+                } else {
+                    emit(Result.Success(city))
+                }
+            }
+
+            is Result.Exception -> emit(cityResult)
         }
     }
 

@@ -9,10 +9,10 @@ sealed class Imperial(val unit: ImperialUnit, open val value: Double) {
 }
 
 enum class ImperialUnit(val type: Int, val unit: String) {
-    SPEED_MIH(7, "mi/h"),
+    SPEED_MIH(9, "mi/h"),
     TEMPERATURE(18, "F"),
-    PRESSURE(14, "inHg"),
-    UNKNOWN(-1, "UnsupportedUnit"),
+    PRESSURE(12, "inHg"),
+    UNKNOWN(-1, "???"),
 }
 
 object ImperialFactory {

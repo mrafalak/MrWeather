@@ -9,4 +9,5 @@ interface CityRepository {
     suspend fun searchCities(query: String): Flow<Result<List<City>>>
     suspend fun saveCityAndSearchHistory(city: City): Flow<Result<Unit>>
     suspend fun getSearchHistory(): Flow<List<SearchHistoryWithCity>>
+    suspend fun getCityById(cityId: String): Flow<Result<City>>
 }
