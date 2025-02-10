@@ -40,14 +40,13 @@ import com.mrapps.mrweather.R
 import com.mrapps.mrweather.domain.model.units.UnitSystemType
 import com.mrapps.mrweather.domain.model.units.UnitType
 import com.mrapps.mrweather.domain.model.units.formatToString
-import com.mrapps.mrweather.domain.model.weather_condition.Direction
 import com.mrapps.mrweather.domain.model.weather_condition.PrecipitationType
-import com.mrapps.mrweather.domain.model.weather_condition.PressureTendency
 import com.mrapps.mrweather.domain.model.weather_condition.WeatherConditions
 import com.mrapps.mrweather.domain.model.weather_condition.Wind
 import com.mrapps.mrweather.domain.util.formatTimeToString
 import com.mrapps.mrweather.ui.animations.AnimationDurations
 import com.mrapps.mrweather.ui.animations.shimmerEffect
+import com.mrapps.mrweather.ui.util.PreviewObjects.conditionsPreview
 import com.mrapps.mrweather.ui.theme.MrWeatherTheme
 import com.mrapps.mrweather.ui.util.getFontColorWithMetricTemperature
 import java.time.LocalDateTime
@@ -82,7 +81,7 @@ fun WeatherConditionsInfo(
 }
 
 @Composable
-fun WeatherConditionsLoading(
+private fun WeatherConditionsLoading(
     modifier: Modifier = Modifier,
     isLoading: Boolean,
     animDuration: Int = AnimationDurations.FADE_IN_OUT
@@ -103,7 +102,7 @@ fun WeatherConditionsLoading(
 }
 
 @Composable
-fun WeatherConditionsNoData(
+private fun WeatherConditionsNoData(
     modifier: Modifier = Modifier,
     weatherConditionsIsNull: Boolean,
     isLoading: Boolean,
@@ -131,7 +130,7 @@ fun WeatherConditionsNoData(
             ) {
                 Image(
                     imageVector = Icons.Default.Warning,
-                    contentDescription = stringResource(R.string.no_data_image),
+                    contentDescription = stringResource(R.string.no_weather_conditions_data_image),
                     modifier = Modifier
                         .size(64.dp)
                         .padding(bottom = 8.dp),
@@ -150,7 +149,7 @@ fun WeatherConditionsNoData(
 }
 
 @Composable
-fun WeatherConditionsDisplay(
+private fun WeatherConditionsDisplay(
     modifier: Modifier = Modifier,
     weatherConditions: WeatherConditions,
     unitSystemType: UnitSystemType,
@@ -235,7 +234,7 @@ private fun LocalObservationTimeDisplay(
 }
 
 @Composable
-fun TemperatureDisplay(
+private fun TemperatureDisplay(
     modifier: Modifier = Modifier,
     temperature: UnitType.Temperature,
     unitSystemType: UnitSystemType
@@ -264,7 +263,7 @@ fun TemperatureDisplay(
 }
 
 @Composable
-fun RealFeelTemperatureDisplay(
+private fun RealFeelTemperatureDisplay(
     modifier: Modifier = Modifier,
     temperature: UnitType.Temperature,
     unitSystemType: UnitSystemType
@@ -309,7 +308,7 @@ private fun PrecipitationDisplay(
 }
 
 @Composable
-fun HumidityDisplay(
+private fun HumidityDisplay(
     modifier: Modifier = Modifier,
     humidity: Int
 ) {
@@ -323,7 +322,7 @@ fun HumidityDisplay(
 }
 
 @Composable
-fun WindDisplay(
+private fun WindDisplay(
     modifier: Modifier = Modifier,
     wind: Wind,
     unitSystemType: UnitSystemType
@@ -348,7 +347,7 @@ fun WindDisplay(
 }
 
 @Composable
-fun CloudCoverDisplay(
+private fun CloudCoverDisplay(
     modifier: Modifier = Modifier,
     cloudCover: Int
 ) {
@@ -362,7 +361,7 @@ fun CloudCoverDisplay(
 }
 
 @Composable
-fun PressureDisplay(
+private fun PressureDisplay(
     modifier: Modifier = Modifier,
     pressure: UnitType.Pressure,
     unitSystemType: UnitSystemType
@@ -385,7 +384,7 @@ fun PressureDisplay(
 
 @PreviewLightDark
 @Composable
-fun WeatherConditionsInfoPreview() {
+private fun WeatherConditionsInfoPreview() {
     MrWeatherTheme {
         WeatherConditionsInfo(
             weatherConditionsState = conditionsPreview,
@@ -396,7 +395,7 @@ fun WeatherConditionsInfoPreview() {
 
 @PreviewLightDark
 @Composable
-fun WeatherConditionsInfoColdPreview() {
+private fun WeatherConditionsInfoColdPreview() {
     MrWeatherTheme {
         WeatherConditionsInfo(
             weatherConditionsState = conditionsPreview.copy(
@@ -416,7 +415,7 @@ fun WeatherConditionsInfoColdPreview() {
 
 @PreviewLightDark
 @Composable
-fun WeatherConditionsInfoWarmPreview() {
+private fun WeatherConditionsInfoWarmPreview() {
     MrWeatherTheme {
         WeatherConditionsInfo(
             weatherConditionsState = conditionsPreview.copy(
@@ -436,7 +435,7 @@ fun WeatherConditionsInfoWarmPreview() {
 
 @PreviewLightDark
 @Composable
-fun WeatherConditionsInfoLoadingPreview() {
+private fun WeatherConditionsInfoLoadingPreview() {
     MrWeatherTheme {
         WeatherConditionsInfo(isLoading = true)
     }
@@ -444,47 +443,8 @@ fun WeatherConditionsInfoLoadingPreview() {
 
 @PreviewLightDark
 @Composable
-fun WeatherConditionsInfoNoDataPreview() {
+private fun WeatherConditionsInfoNoDataPreview() {
     MrWeatherTheme {
         WeatherConditionsInfo()
     }
 }
-
-val conditionsPreview = WeatherConditions(
-    weatherText = "Zachmurzenie",
-    weatherIcon = 803,
-    temperature = UnitType.Temperature(
-        metricValue = 11.0,
-        imperialValue = 51.8
-    ),
-    realFeelTemperature = UnitType.Temperature(
-        metricValue = -2.7,
-        imperialValue = 27.1
-    ),
-    realFeelTemperatureShade = UnitType.Temperature(
-        metricValue = -5.0,
-        imperialValue = 23.0
-    ),
-    relativeHumidity = 82,
-    hasPrecipitation = false,
-    precipitationType = PrecipitationType.NONE,
-    wind = Wind(
-        direction = Direction(
-            degrees = 250,
-            english = "W",
-            localized = "Z"
-        ),
-        speed = UnitType.Speed(
-            kmh = 18.0,
-            mph = 11.2
-        )
-    ),
-    cloudCover = 60,
-    pressure = UnitType.Pressure(
-        mb = 1018.0,
-        inHg = 30.0
-    ),
-    pressureTendency = PressureTendency.STEADY,
-    localObservationDateTime = LocalDateTime.of(2025, 2, 9, 20, 36, 0),
-    epochTime = 1733800200
-)

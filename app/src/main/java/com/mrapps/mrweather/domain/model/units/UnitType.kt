@@ -18,6 +18,22 @@ sealed class UnitType(val metric: Measurement, val imperial: Measurement) {
         metric = Measurement(MeasurementUnit.PRESSURE_MB, mb),
         imperial = Measurement(MeasurementUnit.PRESSURE_INHG, inHg)
     )
+
+    data class Length(
+        private val cm: Double,
+        private val inch: Double
+    ) : UnitType(
+        metric = Measurement(MeasurementUnit.LENGTH_CM, cm),
+        imperial = Measurement(MeasurementUnit.LENGTH_IN, inch)
+    )
+
+    data class SmallLength(
+        private val mm: Double,
+        private val inch: Double
+    ) : UnitType(
+        metric = Measurement(MeasurementUnit.LENGTH_MM, mm),
+        imperial = Measurement(MeasurementUnit.LENGTH_IN, inch)
+    )
 }
 
 fun UnitType.formatToString(unitSystemType: UnitSystemType): String {
