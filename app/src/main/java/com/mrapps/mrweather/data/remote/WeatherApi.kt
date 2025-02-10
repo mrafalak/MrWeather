@@ -1,5 +1,6 @@
 package com.mrapps.mrweather.data.remote
 
+import com.mrapps.mrweather.data.remote.dto.forecast.ForecastDto
 import com.mrapps.mrweather.data.remote.dto.location.CityDto
 import com.mrapps.mrweather.data.remote.dto.weather_condition.WeatherConditionsDto
 import com.mrapps.mrweather.data.remote.util.LanguageEnum
@@ -28,4 +29,13 @@ interface WeatherApi {
         @Query("language") language: LanguageEnum = DEFAULT_LANGUAGE,
         @Query("details") details: Boolean = true,
     ): List<WeatherConditionsDto>
+
+    @RequiresAuth
+    @GET("forecasts/${API_VERSION}/daily/5day/{locationKey}")
+    suspend fun fetchFiveDaysForecast(
+        @Path("locationKey") locationKey: String,
+        @Query("language") language: LanguageEnum = DEFAULT_LANGUAGE,
+        @Query("details") details: Boolean = true,
+        @Query("metric") metric: Boolean,
+    ): ForecastDto
 }

@@ -20,10 +20,34 @@ class CityWeatherViewModel(
 
     fun onAction(action: CityWeatherScreenAction) {
         when (action) {
-            is FetchCurrentConditions -> fetchCurrentConditions(action.cityId)
             is FetchCityData -> fetchCityData(action.cityId)
+            is FetchCurrentConditions -> fetchCurrentConditions(action.cityId)
+            is FetchForecast -> fetchForecast(action.cityId)
             ClearError -> clearError()
             else -> Unit
+        }
+    }
+
+    private fun fetchCityData(cityId: String) {
+        viewModelScope.launch {
+            _state.value = state.value.copy(isCityLoading = true, cityId = cityId)
+            cityRepository.getCityById(cityId).collect { result ->
+                when (result) {
+                    is Result.Success -> {
+                        _state.value = state.value.copy(
+                            city = result.data,
+                            isCityLoading = false
+                        )
+                    }
+
+                    is Result.Exception -> {
+                        _state.value = state.value.copy(
+                            isCityLoading = false,
+                            error = result.error,
+                        )
+                    }
+                }
+            }
         }
     }
 
@@ -50,26 +74,27 @@ class CityWeatherViewModel(
         }
     }
 
-    private fun fetchCityData(cityId: String) {
+    private fun fetchForecast(cityId: String) {
         viewModelScope.launch {
-            _state.value = state.value.copy(isCityLoading = true, cityId = cityId)
-            cityRepository.getCityById(cityId).collect { result ->
-                when (result) {
-                    is Result.Success -> {
-                        _state.value = state.value.copy(
-                            city = result.data,
-                            isCityLoading = false
-                        )
-                    }
+            _state.value = state.value.copy(isForecastLoading = true)
+            weatherRepository.fetchFiveDaysForecast(cityId, state.value.unitSystemType)
+                .collect { result ->
+                    when (result) {
+                        is Result.Success -> {
+                            _state.value = state.value.copy(
+                                forecast = result.data,
+                                isForecastLoading = false
+                            )
+                        }
 
-                    is Result.Exception -> {
-                        _state.value = state.value.copy(
-                            isCityLoading = false,
-                            error = result.error,
-                        )
+                        is Result.Exception -> {
+                            _state.value = state.value.copy(
+                                isForecastLoading = false,
+                                error = result.error,
+                            )
+                        }
                     }
                 }
-            }
         }
     }
 

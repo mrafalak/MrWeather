@@ -48,25 +48,30 @@ import com.mrapps.mrweather.R
 import com.mrapps.mrweather.domain.model.location.City
 import com.mrapps.mrweather.ui.animations.AnimationDurations
 import com.mrapps.mrweather.ui.animations.shimmerEffect
+import com.mrapps.mrweather.ui.home.city_weather.components.ForecastInfo
+import com.mrapps.mrweather.ui.util.PreviewObjects
 import com.mrapps.mrweather.ui.home.city_weather.components.WeatherConditionsInfo
-import com.mrapps.mrweather.ui.home.city_weather.components.conditionsPreview
 import com.mrapps.mrweather.ui.home.search_city.components.cityPreview
 import com.mrapps.mrweather.ui.theme.MrWeatherTheme
+import com.mrapps.mrweather.ui.util.PreviewObjects.conditionsPreview
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
 
 @Composable
 fun CityWeatherScreen(
-    cityId: String,
+    cityIdArg: String,
     viewModel: CityWeatherViewModel = koinViewModel(),
     navigateBack: () -> Unit
 ) {
     val state by viewModel.state.collectAsState()
 
-    LaunchedEffect(cityId) {
-        viewModel.onAction(CityWeatherScreenAction.FetchCityData(cityId))
-        viewModel.onAction(CityWeatherScreenAction.FetchCurrentConditions(cityId))
+    LaunchedEffect(cityIdArg) {
+        if (state.cityId == null) {
+            viewModel.onAction(CityWeatherScreenAction.FetchCityData(cityIdArg))
+            viewModel.onAction(CityWeatherScreenAction.FetchForecast(cityIdArg))
+            viewModel.onAction(CityWeatherScreenAction.FetchCurrentConditions(cityIdArg))
+        }
     }
 
     CityWeatherContent(
@@ -109,7 +114,7 @@ fun CityWeatherContent(
         },
         snackbarHost = { SnackbarHost(snackbarHostState) },
     ) { innerPaddings ->
-        Box(
+        Column(
             modifier = Modifier
                 .padding(innerPaddings)
                 .padding(8.dp)
@@ -117,6 +122,12 @@ fun CityWeatherContent(
             WeatherConditionsInfo(
                 weatherConditionsState = state.weatherConditions,
                 isLoading = state.isConditionsLoading
+            )
+            ForecastInfo(
+                modifier = Modifier.padding(top = 16.dp),
+                forecast = state.forecast,
+                isLoading = state.isForecastLoading,
+                unitSystemType = state.unitSystemType
             )
         }
     }
@@ -257,6 +268,7 @@ fun CityWeatherContentPreview(modifier: Modifier = Modifier) {
             state = CityWeatherScreenState(
                 city = cityPreview,
                 weatherConditions = conditionsPreview,
+                forecast = PreviewObjects.fiveDaysForecast,
                 isCityLoading = false,
                 isConditionsLoading = false,
                 error = null

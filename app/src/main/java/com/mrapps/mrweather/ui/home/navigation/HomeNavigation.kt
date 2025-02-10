@@ -40,7 +40,7 @@ fun NavGraphBuilder.addHomeNavGraph(navController: NavHostController) {
             ) + fadeOut()
         }) { backStackEntry ->
         CityWeatherScreen(
-            cityId = backStackEntry.arguments?.getString(ARGUMENT_CITY_ID) ?: DEFAULT_CITY_ID,
+            cityIdArg = backStackEntry.arguments?.getString(ARGUMENT_CITY_ID) ?: DEFAULT_CITY_ID,
             navigateBack = {
                 navController.popBackStack()
             }

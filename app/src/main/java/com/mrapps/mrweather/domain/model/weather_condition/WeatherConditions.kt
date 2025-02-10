@@ -5,7 +5,7 @@ import java.time.LocalDateTime
 
 data class WeatherConditions(
     val weatherText: String,
-    val weatherIcon: Int,
+    val weatherIcon: WeatherIconType,
     val temperature: UnitType.Temperature,
     val realFeelTemperature: UnitType.Temperature,
     val realFeelTemperatureShade: UnitType.Temperature,
