@@ -10,9 +10,18 @@
     <string name="weather_conditions_no_data_available">No weather conditions available</string>
     <string name="city_loading">Loading city…</string>
     <string name="city_loading_warning">Failed to load city data</string>
-    <string name="temperature_label">Temperature:</string>
+    <string name="local_time_label">Local Observation Time:</string>
     <string name="real_feel_label">Real Feel:</string>
     <string name="wind_label">Wind:</string>
     <string name="pressure_label">Pressure:</string>
     <string name="cloud_cover_label">Cloud Cover:</string>
+    <string name="precipitation_label">Precipitation:</string>
+    <string name="humidity_label">Humidity:</string>
+    <string name="precipitation_type_rain">Rain</string>
+    <string name="precipitation_type_snow">Snow</string>
+    <string name="precipitation_type_ice">Ice</string>
+    <string name="precipitation_type_mixed">Mixed</string>
+    <string name="precipitation_type_none">None</string>
+    <string name="precipitation_type_unknown">Unknown</string>
+    <string name="no_data_image">No data</string>
 </resources>

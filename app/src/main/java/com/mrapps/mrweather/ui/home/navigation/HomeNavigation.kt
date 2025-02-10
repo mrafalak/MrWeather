@@ -1,5 +1,9 @@
 package com.mrapps.mrweather.ui.home.navigation
 
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
@@ -14,7 +18,27 @@ fun NavGraphBuilder.addHomeNavGraph(navController: NavHostController) {
             }
         )
     }
-    composable(HomeRoutes.CityWeather.route) { backStackEntry ->
+    composable(HomeRoutes.CityWeather.route,
+        enterTransition = {
+            slideInHorizontally(
+                initialOffsetX = { it }
+            ) + fadeIn()
+        },
+        exitTransition = {
+            slideOutHorizontally(
+                targetOffsetX = { -it }
+            ) + fadeOut()
+        },
+        popEnterTransition = {
+            slideInHorizontally(
+                initialOffsetX = { -it }
+            ) + fadeIn()
+        },
+        popExitTransition = {
+            slideOutHorizontally(
+                targetOffsetX = { it }
+            ) + fadeOut()
+        }) { backStackEntry ->
         CityWeatherScreen(
             cityId = backStackEntry.arguments?.getString(ARGUMENT_CITY_ID) ?: DEFAULT_CITY_ID,
             navigateBack = {
