@@ -11,7 +11,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -32,6 +32,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalInspectionMode
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewLightDark
@@ -42,6 +43,7 @@ import com.mrapps.mrweather.domain.model.units.UnitType
 import com.mrapps.mrweather.domain.model.units.formatToString
 import com.mrapps.mrweather.domain.model.weather_condition.PrecipitationType
 import com.mrapps.mrweather.domain.model.weather_condition.WeatherConditions
+import com.mrapps.mrweather.domain.model.weather_condition.WeatherIconType
 import com.mrapps.mrweather.domain.model.weather_condition.Wind
 import com.mrapps.mrweather.domain.util.formatTimeToString
 import com.mrapps.mrweather.ui.animations.AnimationDurations
@@ -63,7 +65,7 @@ fun WeatherConditionsInfo(
     Box(
         modifier
             .fillMaxWidth()
-            .height(160.dp)
+            .heightIn(max = 264.dp)
     ) {
         WeatherConditionsLoading(isLoading = isLoading)
         WeatherConditionsNoData(
@@ -170,7 +172,7 @@ private fun WeatherConditionsDisplay(
         exit = fadeOut(animationSpec = tween(animDuration))
     ) {
         Card(
-            modifier = modifier.fillMaxSize(),
+            modifier = modifier.fillMaxWidth(),
             elevation = CardDefaults.cardElevation(4.dp),
             colors = CardDefaults.cardColors()
         ) {
@@ -182,7 +184,9 @@ private fun WeatherConditionsDisplay(
                     epochTime = weatherConditions.epochTime
                 )
                 Row(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 8.dp),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Column {
@@ -196,6 +200,7 @@ private fun WeatherConditionsDisplay(
                         )
                     }
                     Column(horizontalAlignment = Alignment.End) {
+                        TodayWeatherImage(weatherType = weatherConditions.weatherIcon)
                         GeneralDescriptionDisplay(description = weatherConditions.weatherText)
                         PrecipitationDisplay(precipitationType = weatherConditions.precipitationType)
                         HumidityDisplay(humidity = weatherConditions.relativeHumidity)
@@ -213,6 +218,21 @@ private fun WeatherConditionsDisplay(
             }
         }
     }
+}
+
+@Composable
+private fun TodayWeatherImage(
+    modifier: Modifier = Modifier,
+    weatherType: WeatherIconType
+) {
+    Image(
+        modifier = modifier
+            .size(50.dp)
+            .clip(RoundedCornerShape(8.dp)),
+        painter = painterResource(id = weatherType.resId),
+        contentDescription = stringResource(id = weatherType.stringResId),
+        colorFilter = ColorFilter.tint(weatherType.colorRes)
+    )
 }
 
 @Composable
@@ -236,52 +256,56 @@ private fun LocalObservationTimeDisplay(
 @Composable
 private fun TemperatureDisplay(
     modifier: Modifier = Modifier,
-    temperature: UnitType.Temperature,
+    temperature: UnitType.Temperature?,
     unitSystemType: UnitSystemType
 ) {
-    val defaultFontColor = MaterialTheme.colorScheme.onBackground
-    val (temperatureText, color) = remember(
-        temperature.metric.value,
-        temperature.imperial.value,
-        unitSystemType
-    ) {
-        Pair(
-            temperature.formatToString(unitSystemType),
-            getFontColorWithMetricTemperature(
-                temperature = temperature.metric.value,
-                defaultColor = defaultFontColor
+    if (temperature != null) {
+        val defaultFontColor = MaterialTheme.colorScheme.onBackground
+        val (temperatureText, color) = remember(
+            temperature.metric.value,
+            temperature.imperial.value,
+            unitSystemType
+        ) {
+            Pair(
+                temperature.formatToString(unitSystemType, appendSpace = false),
+                getFontColorWithMetricTemperature(
+                    temperature = temperature.metric.value,
+                    defaultColor = defaultFontColor
+                )
             )
+        }
+
+        Text(
+            modifier = modifier,
+            text = temperatureText,
+            style = MaterialTheme.typography.displayLarge,
+            color = color
         )
     }
-
-    Text(
-        modifier = modifier,
-        text = temperatureText,
-        style = MaterialTheme.typography.displayMedium,
-        color = color
-    )
 }
 
 @Composable
 private fun RealFeelTemperatureDisplay(
     modifier: Modifier = Modifier,
-    temperature: UnitType.Temperature,
+    temperature: UnitType.Temperature?,
     unitSystemType: UnitSystemType
 ) {
-    val realFeelLabel = stringResource(id = R.string.real_feel_label)
-    val realFeelText = remember(
-        temperature.metric.value,
-        temperature.imperial.value,
-        unitSystemType
-    ) {
-        temperature.formatToString(unitSystemType)
-    }
+    if (temperature != null) {
+        val realFeelLabel = stringResource(id = R.string.real_feel_label)
+        val realFeelText = remember(
+            temperature.metric.value,
+            temperature.imperial.value,
+            unitSystemType
+        ) {
+            temperature.formatToString(unitSystemType, appendSpace = false)
+        }
 
-    Text(
-        modifier = modifier,
-        text = "$realFeelLabel $realFeelText",
-        style = MaterialTheme.typography.labelMedium
-    )
+        Text(
+            modifier = modifier,
+            text = "$realFeelLabel $realFeelText",
+            style = MaterialTheme.typography.labelMedium
+        )
+    }
 }
 
 @Composable
@@ -310,76 +334,84 @@ private fun PrecipitationDisplay(
 @Composable
 private fun HumidityDisplay(
     modifier: Modifier = Modifier,
-    humidity: Int
+    humidity: Int?
 ) {
-    val humidityLabel = stringResource(id = R.string.humidity_label)
+    if (humidity != null) {
+        val humidityLabel = stringResource(id = R.string.humidity_label)
 
-    Text(
-        modifier = modifier,
-        text = "$humidityLabel $humidity%",
-        style = MaterialTheme.typography.bodySmall
-    )
+        Text(
+            modifier = modifier,
+            text = "$humidityLabel $humidity%",
+            style = MaterialTheme.typography.bodySmall
+        )
+    }
 }
 
 @Composable
 private fun WindDisplay(
     modifier: Modifier = Modifier,
-    wind: Wind,
+    wind: Wind?,
     unitSystemType: UnitSystemType
 ) {
-    val windLabel = stringResource(id = R.string.wind_label)
-    val windText = remember(
-        wind.speed.metric.value,
-        wind.speed.imperial.value,
-        wind.direction.localized,
-        unitSystemType
-    ) {
-        val speedText = wind.speed.formatToString(unitSystemType)
-        val direction = wind.direction.localized
-        "$speedText - $direction"
-    }
+    if (wind != null) {
+        val windLabel = stringResource(id = R.string.wind_label)
+        val windText = remember(
+            wind.speed.metric.value,
+            wind.speed.imperial.value,
+            wind.direction.localized,
+            unitSystemType
+        ) {
+            val speedText = wind.speed.formatToString(unitSystemType)
+            val direction = wind.direction.localized
+            "$speedText - $direction"
+        }
 
-    Text(
-        modifier = modifier,
-        text = "$windLabel $windText",
-        style = MaterialTheme.typography.bodySmall
-    )
+        Text(
+            modifier = modifier,
+            text = "$windLabel $windText",
+            style = MaterialTheme.typography.bodySmall
+        )
+    }
 }
 
 @Composable
 private fun CloudCoverDisplay(
     modifier: Modifier = Modifier,
-    cloudCover: Int
+    cloudCover: Int?
 ) {
-    val cloudCoverLabel = stringResource(id = R.string.cloud_cover_label)
+    if (cloudCover != null) {
+        val cloudCoverLabel = stringResource(id = R.string.cloud_cover_label)
 
-    Text(
-        modifier = modifier,
-        text = "$cloudCoverLabel $cloudCover%",
-        style = MaterialTheme.typography.bodySmall
-    )
+        Text(
+            modifier = modifier,
+            text = "$cloudCoverLabel $cloudCover%",
+            style = MaterialTheme.typography.bodySmall
+        )
+    }
 }
 
 @Composable
 private fun PressureDisplay(
     modifier: Modifier = Modifier,
-    pressure: UnitType.Pressure,
+    pressure: UnitType.Pressure?,
     unitSystemType: UnitSystemType
 ) {
-    val pressureLabel = stringResource(id = R.string.pressure_label)
-    val pressureText = remember(
-        pressure.metric.value,
-        pressure.imperial.value,
-        unitSystemType
-    ) {
-        pressure.formatToString(unitSystemType)
-    }
+    if (pressure != null) {
+        val pressureLabel = stringResource(id = R.string.pressure_label)
+        val pressureText = remember(
+            pressure.metric.value,
+            pressure.imperial.value,
+            unitSystemType
+        ) {
+            pressure.formatToString(unitSystemType)
+        }
 
-    Text(
-        modifier = modifier,
-        text = "$pressureLabel $pressureText",
-        style = MaterialTheme.typography.bodySmall
-    )
+        Text(
+            modifier = modifier,
+            text = "$pressureLabel $pressureText",
+            style = MaterialTheme.typography.bodySmall
+        )
+    }
 }
 
 @PreviewLightDark

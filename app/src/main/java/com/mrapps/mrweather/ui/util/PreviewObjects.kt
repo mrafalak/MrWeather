@@ -7,7 +7,6 @@ import com.mrapps.mrweather.data.remote.dto.forecast.RelativeHumidityDto
 import com.mrapps.mrweather.data.remote.dto.forecast.SunDto
 import com.mrapps.mrweather.data.remote.dto.forecast.TemperaturesRangeDto
 import com.mrapps.mrweather.data.remote.dto.unit.UnitDoubleDto
-import com.mrapps.mrweather.data.remote.dto.unit.UnitIntDto
 import com.mrapps.mrweather.data.remote.dto.weather_condition.DirectionDto
 import com.mrapps.mrweather.data.remote.dto.weather_condition.WindDto
 import com.mrapps.mrweather.domain.model.units.UnitType
@@ -45,13 +44,13 @@ object PreviewObjects {
             hasPrecipitation = false,
             precipitationProbability = 10,
             hoursOfPrecipitation = 0,
-            rain = UnitIntDto(unit = "mm", unitType = 20, value = 0),
+            rain = UnitDoubleDto(unit = "mm", unitType = 20, value = 0.0),
             rainProbability = 5,
             hoursOfRain = 0,
-            snow = UnitIntDto(unit = "cm", unitType = 19, value = 0),
+            snow = UnitDoubleDto(unit = "cm", unitType = 19, value = 0.0),
             snowProbability = 20,
             hoursOfSnow = 0,
-            ice = UnitIntDto(unit = "mm", unitType = 20, value = 0),
+            ice = UnitDoubleDto(unit = "mm", unitType = 20, value = 0.0),
             iceProbability = 5,
             hoursOfIce = 0,
             wind = WindDto(
@@ -75,13 +74,13 @@ object PreviewObjects {
             hasPrecipitation = false,
             precipitationProbability = 5,
             hoursOfPrecipitation = 0,
-            rain = UnitIntDto(unit = "mm", unitType = 20, value = 0),
+            rain = UnitDoubleDto(unit = "mm", unitType = 20, value = 0.0),
             rainProbability = 2,
             hoursOfRain = 0,
-            snow = UnitIntDto(unit = "cm", unitType = 19, value = 0),
+            snow = UnitDoubleDto(unit = "cm", unitType = 19, value = 0.0),
             snowProbability = 15,
             hoursOfSnow = 0,
-            ice = UnitIntDto(unit = "mm", unitType = 20, value = 0),
+            ice = UnitDoubleDto(unit = "mm", unitType = 20, value = 0.0),
             iceProbability = 3,
             hoursOfIce = 0,
             wind = WindDto(

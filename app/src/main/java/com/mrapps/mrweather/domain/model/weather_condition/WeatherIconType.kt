@@ -154,7 +154,7 @@ enum class WeatherIconType(val id: Int, val resId: Int, val stringResId: Int, va
     UNKNOWN(-1, R.drawable.ic_weather_unknown, R.string.weather_unknown, GrayUnknown);
 
     companion object {
-        fun fromTypeId(id: Int): WeatherIconType {
+        fun fromTypeId(id: Int?): WeatherIconType {
             return entries.find { it.id == id } ?: UNKNOWN
         }
     }

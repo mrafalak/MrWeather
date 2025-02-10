@@ -267,7 +267,11 @@ fun CityWeatherContentPreview(modifier: Modifier = Modifier) {
         CityWeatherContent(
             state = CityWeatherScreenState(
                 city = cityPreview,
-                weatherConditions = conditionsPreview,
+                weatherConditions = conditionsPreview.copy(
+                    temperature = conditionsPreview.temperature?.copy(
+                        metricValue = 21.0
+                    )
+                ),
                 forecast = PreviewObjects.fiveDaysForecast,
                 isCityLoading = false,
                 isConditionsLoading = false,

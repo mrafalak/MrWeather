@@ -40,7 +40,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalInspectionMode
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -216,32 +215,36 @@ fun ForecastDay(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.SpaceBetween
         ) {
-            DateDisplay(date = dailyForecast.date)
-            Spacer(modifier = Modifier.height(8.dp))
-            DayNightImages(
-                dayIcon = dailyForecast.day.icon,
-                nightIcon = dailyForecast.night.icon
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            TemperatureDisplay(
-                temperatures = dailyForecast.temperatures,
-                unitSystemType = unitSystemType
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            Column(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                RealFeelTemperatureDisplay(
-                    temperatures = dailyForecast.realFeelTemperature,
+            if (dailyForecast.temperatures == null || dailyForecast.realFeelTemperature == null || dailyForecast.realFeelTemperatureShade == null) {
+                ForecastNoData(forecastIsNull = true, isLoading = false)
+            } else {
+                DateDisplay(date = dailyForecast.date)
+                Spacer(modifier = Modifier.height(8.dp))
+                DayNightImages(
+                    dayIcon = dailyForecast.day.icon,
+                    nightIcon = dailyForecast.night.icon
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                TemperatureDisplay(
+                    temperatures = dailyForecast.temperatures,
                     unitSystemType = unitSystemType
                 )
+                Spacer(modifier = Modifier.height(8.dp))
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    RealFeelTemperatureDisplay(
+                        temperatures = dailyForecast.realFeelTemperature,
+                        unitSystemType = unitSystemType
+                    )
 
-                Spacer(modifier = Modifier.height(6.dp))
-                RealFeelShadeTemperatureDisplay(
-                    temperatures = dailyForecast.realFeelTemperatureShade,
-                    unitSystemType = unitSystemType
-                )
+                    Spacer(modifier = Modifier.height(6.dp))
+                    RealFeelShadeTemperatureDisplay(
+                        temperatures = dailyForecast.realFeelTemperatureShade,
+                        unitSystemType = unitSystemType
+                    )
+                }
             }
         }
     }
@@ -273,32 +276,6 @@ fun DayNightImages(
     Row(modifier = modifier) {
         WeatherImage(modifier = Modifier.weight(1f), weatherType = dayIcon)
         WeatherImage(modifier = Modifier.weight(1f), weatherType = nightIcon)
-    }
-}
-
-@Composable
-fun WeatherImage(
-    modifier: Modifier = Modifier,
-    weatherType: WeatherIconType
-) {
-    Column(
-        modifier = modifier,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Image(
-            painter = painterResource(id = weatherType.resId),
-            contentDescription = stringResource(id = weatherType.stringResId),
-            modifier = Modifier
-                .size(50.dp)
-                .clip(RoundedCornerShape(8.dp)),
-            colorFilter = ColorFilter.tint(weatherType.colorRes)
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-        Text(
-            text = stringResource(id = weatherType.stringResId),
-            style = MaterialTheme.typography.labelSmall,
-            textAlign = TextAlign.Center
-        )
     }
 }
 
