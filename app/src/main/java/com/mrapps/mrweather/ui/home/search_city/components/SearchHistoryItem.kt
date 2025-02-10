@@ -2,7 +2,6 @@ package com.mrapps.mrweather.ui.home.search_city.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -36,12 +35,12 @@ fun SearchHistoryItem(
             .fillMaxWidth()
             .clickable {
                 onClick(city)
-            },
-        verticalArrangement = Arrangement.Center
+            }
     ) {
         Row(
             modifier = Modifier
-                .padding(horizontal = 8.dp),
+                .padding(horizontal = 8.dp)
+                .padding(top = 12.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Icon(
@@ -70,7 +69,7 @@ fun SearchHistoryItem(
         }
         Spacer(
             modifier = Modifier
-                .padding(top = 8.dp)
+                .padding(top = 12.dp)
                 .height(0.7.dp)
                 .fillMaxWidth()
                 .background(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f))

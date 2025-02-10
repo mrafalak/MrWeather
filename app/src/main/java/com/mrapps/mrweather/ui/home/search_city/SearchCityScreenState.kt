@@ -7,6 +7,7 @@ data class SearchCityScreenState(
     val cities: List<City> = emptyList(),
     val searchHistoryWithCities: List<SearchHistoryWithCity> = emptyList(),
     val query: String = "",
+    val isCitySaving: Boolean = false,
     val isLoading: Boolean = false,
     val error: Throwable? = null,
 ) {

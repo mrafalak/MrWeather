@@ -1,5 +1,11 @@
 package com.mrapps.mrweather.ui.home.search_city
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -17,6 +23,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -28,7 +35,9 @@ import com.mrapps.mrweather.R
 import com.mrapps.mrweather.domain.model.SearchHistory
 import com.mrapps.mrweather.domain.model.SearchHistoryWithCity
 import com.mrapps.mrweather.domain.model.location.City
+import com.mrapps.mrweather.ui.animations.AnimationDurations
 import com.mrapps.mrweather.ui.home.search_city.components.CityItem
+import com.mrapps.mrweather.ui.home.search_city.components.FullScreenLoadingOverlay
 import com.mrapps.mrweather.ui.home.search_city.components.SearchHistoryItem
 import com.mrapps.mrweather.ui.home.search_city.components.SearchTextField
 import com.mrapps.mrweather.ui.home.search_city.components.cityPreview
@@ -68,6 +77,12 @@ fun SearchScreenContent(
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
+    val history by remember(state.searchHistoryWithCities) {
+        derivedStateOf { state.searchHistoryWithCities.map { it.copy() } }
+    }
+    val cities by remember(state.cities) {
+        derivedStateOf { state.cities.map { it.copy() } }
+    }
 
     LaunchedEffect(state.error) {
         if (state.error != null) {
@@ -81,48 +96,45 @@ fun SearchScreenContent(
     Scaffold(
         snackbarHost = { SnackbarHost(snackbarHostState) },
     ) { innerPaddings ->
-        Column(modifier = Modifier.padding(innerPaddings)) {
-            SearchTextField(
-                query = state.query,
-                onQueryChanged = { onAction(SearchCityScreenAction.QueryChanged(it)) },
-                onSearchClicked = {
-                    if (state.query.isNotBlank()) {
-                        onAction(SearchCityScreenAction.SearchClicked)
-                    }
-                },
-                enabled = !state.isLoading
-            )
-
-            if (state.isLoading) {
-                LinearProgressIndicator(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(4.dp)
-                )
-            } else if (state.shouldShowHistory()) {
-                Column(modifier = Modifier.padding(top = 8.dp)) {
-                    Text(
-                        modifier = Modifier.padding(horizontal = 8.dp),
-                        text = stringResource(R.string.recent),
-                        style = MaterialTheme.typography.titleSmall,
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
-                    )
-                    Spacer(modifier = Modifier.width(8.dp))
-                    SearchHistoryList(
-                        history = state.searchHistoryWithCities,
-                        onHistoryCityClick = {
-                            onAction(SearchCityScreenAction.CityClicked(it))
+        Box(modifier = Modifier.padding(innerPaddings)) {
+            Column {
+                SearchTextField(
+                    query = state.query,
+                    onQueryChanged = { onAction(SearchCityScreenAction.QueryChanged(it)) },
+                    onSearchClicked = {
+                        if (state.query.isNotBlank()) {
+                            onAction(SearchCityScreenAction.SearchClicked)
                         }
+                    },
+                    enabled = !state.isLoading
+                )
+
+                if (state.isLoading) {
+                    LinearProgressIndicator(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(4.dp)
                     )
+                } else {
+                    Spacer(modifier = Modifier.height(4.dp))
                 }
-            } else if (state.cities.isNotEmpty()) {
+
+                SearchHistoryDisplay(
+                    history = history,
+                    visible = state.shouldShowHistory(),
+                    onCityClick = {
+                        onAction(SearchCityScreenAction.CityClicked(it))
+                    }
+                )
+
                 SearchedCities(
-                    cities = state.cities,
+                    cities = cities,
                     onCityClick = {
                         onAction(SearchCityScreenAction.CityClicked(it))
                     }
                 )
             }
+            FullScreenLoadingOverlay(isLoading = state.isCitySaving)
         }
     }
 }
@@ -153,17 +165,55 @@ private fun SearchHistoryList(
 private fun SearchedCities(
     cities: List<City>,
     onCityClick: (city: City) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    animDuration: Int = AnimationDurations.FADE_IN_OUT
 ) {
-    LazyColumn(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(top = 8.dp)
+    AnimatedVisibility(
+        visible = cities.isNotEmpty(),
+        enter = fadeIn(animationSpec = tween(animDuration)) + slideInVertically(initialOffsetY = { -100 }),
+        exit = fadeOut(animationSpec = tween(animDuration))
     ) {
-        items(cities) { city ->
-            CityItem(
-                city = city,
-                onClick = {
+        LazyColumn(
+            modifier = modifier
+                .fillMaxWidth()
+                .padding(top = 8.dp)
+        ) {
+            items(cities) { city ->
+                CityItem(
+                    city = city,
+                    onClick = {
+                        onCityClick(it)
+                    }
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun SearchHistoryDisplay(
+    modifier: Modifier = Modifier,
+    history: List<SearchHistoryWithCity>,
+    visible: Boolean,
+    animDuration: Int = AnimationDurations.FADE_IN_OUT,
+    onCityClick: (city: City) -> Unit
+) {
+    AnimatedVisibility(
+        visible = visible,
+        enter = fadeIn(animationSpec = tween(animDuration)),
+        exit = fadeOut(animationSpec = tween(animDuration))
+    ) {
+        Column(modifier = modifier.padding(top = 8.dp)) {
+            Text(
+                modifier = Modifier.padding(horizontal = 8.dp),
+                text = stringResource(R.string.recent),
+                style = MaterialTheme.typography.titleSmall,
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
+            )
+            Spacer(modifier = Modifier.width(8.dp))
+            SearchHistoryList(
+                history = history,
+                onHistoryCityClick = {
                     onCityClick(it)
                 }
             )
@@ -220,8 +270,15 @@ fun SearchScreenContentHistoryPreview() {
 
     MrWeatherTheme {
         SearchScreenContent(
-            state = SearchCityScreenState(searchHistoryWithCities = listOf(searchHistoryWithCity)),
-            onAction = {}
+            onAction = {},
+            state = SearchCityScreenState(
+                searchHistoryWithCities = listOf(
+                    searchHistoryWithCity,
+                    searchHistoryWithCity,
+                    searchHistoryWithCity,
+                    searchHistoryWithCity
+                )
+            )
         )
     }
 }
