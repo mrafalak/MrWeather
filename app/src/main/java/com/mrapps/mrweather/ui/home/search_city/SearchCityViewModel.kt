@@ -49,7 +49,7 @@ class SearchCityViewModel(private val cityRepository: CityRepository) : ViewMode
 
     private fun searchCity(query: String) {
         viewModelScope.launch {
-            startLoading()
+            _state.value = state.value.copy(isLoading = true)
             cityRepository.searchCities(query).collect { result ->
                 when (result) {
                     is Result.Success -> {
@@ -73,12 +73,13 @@ class SearchCityViewModel(private val cityRepository: CityRepository) : ViewMode
 
     private fun saveCityAndSearchHistory(city: City) {
         viewModelScope.launch {
-            startLoading()
+            _state.value = state.value.copy(isLoading = true, isCitySaving = true)
             cityRepository.saveCityAndSearchHistory(city).collect { result ->
                 when (result) {
                     is Result.Success -> {
                         _state.value = state.value.copy(
-                            isLoading = false
+                            isLoading = false,
+                            isCitySaving = false
                         )
                         _effect.send(SearchScreenEffect.NavigateToCityWeather(cityId = city.id))
                     }
@@ -86,6 +87,7 @@ class SearchCityViewModel(private val cityRepository: CityRepository) : ViewMode
                     is Result.Exception -> {
                         _state.value = state.value.copy(
                             isLoading = false,
+                            isCitySaving = false,
                             error = result.error,
                         )
                     }
@@ -103,10 +105,6 @@ class SearchCityViewModel(private val cityRepository: CityRepository) : ViewMode
 
     private fun clearError() {
         _state.value = state.value.copy(error = null)
-    }
-
-    private fun startLoading() {
-        _state.value = state.value.copy(isLoading = true)
     }
 }
 
