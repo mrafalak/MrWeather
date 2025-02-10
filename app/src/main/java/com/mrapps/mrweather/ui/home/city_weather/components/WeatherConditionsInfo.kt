@@ -11,7 +11,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -65,7 +65,7 @@ fun WeatherConditionsInfo(
     Box(
         modifier
             .fillMaxWidth()
-            .heightIn(max = 264.dp)
+            .height(220.dp),
     ) {
         WeatherConditionsLoading(isLoading = isLoading)
         WeatherConditionsNoData(
@@ -172,7 +172,7 @@ private fun WeatherConditionsDisplay(
         exit = fadeOut(animationSpec = tween(animDuration))
     ) {
         Card(
-            modifier = modifier.fillMaxWidth(),
+            modifier = modifier.fillMaxSize(),
             elevation = CardDefaults.cardElevation(4.dp),
             colors = CardDefaults.cardColors()
         ) {
