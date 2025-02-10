@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.mrapps.mrweather.domain.CityRepository
 import com.mrapps.mrweather.domain.WeatherRepository
 import com.mrapps.mrweather.domain.model.util.Result
+import com.mrapps.mrweather.ui.home.city_weather.CityWeatherScreenAction.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -19,8 +20,9 @@ class CityWeatherViewModel(
 
     fun onAction(action: CityWeatherScreenAction) {
         when (action) {
-            is CityWeatherScreenAction.FetchCurrentConditions -> fetchCurrentConditions(action.cityId)
-            is CityWeatherScreenAction.FetchCityData -> fetchCityData(action.cityId)
+            is FetchCurrentConditions -> fetchCurrentConditions(action.cityId)
+            is FetchCityData -> fetchCityData(action.cityId)
+            ClearError -> clearError()
             else -> Unit
         }
     }
@@ -69,5 +71,9 @@ class CityWeatherViewModel(
                 }
             }
         }
+    }
+
+    private fun clearError() {
+        _state.value = state.value.copy(error = null)
     }
 }

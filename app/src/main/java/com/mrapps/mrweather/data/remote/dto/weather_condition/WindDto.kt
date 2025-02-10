@@ -1,6 +1,7 @@
 package com.mrapps.mrweather.data.remote.dto.weather_condition
 
 import com.google.gson.annotations.SerializedName
+import com.mrapps.mrweather.domain.model.units.UnitType
 import com.mrapps.mrweather.domain.model.weather_condition.Wind
 
 data class WindDto(
@@ -9,6 +10,9 @@ data class WindDto(
 ) {
     fun toWind(): Wind = Wind(
         direction = this.direction.toDirection(),
-        speed = this.speed.toUnit()
+        speed = UnitType.Speed(
+            this.speed.metric.value,
+            this.speed.imperial.value
+        )
     )
 }
