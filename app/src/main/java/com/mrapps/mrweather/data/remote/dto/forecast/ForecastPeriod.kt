@@ -1,7 +1,7 @@
 package com.mrapps.mrweather.data.remote.dto.forecast
 
 import com.google.gson.annotations.SerializedName
-import com.mrapps.mrweather.data.remote.dto.unit.UnitIntDto
+import com.mrapps.mrweather.data.remote.dto.unit.UnitDoubleDto
 import com.mrapps.mrweather.data.remote.dto.weather_condition.WindDto
 import com.mrapps.mrweather.domain.model.forecast.ForecastPeriod
 import com.mrapps.mrweather.domain.model.weather_condition.WeatherIconType
@@ -16,13 +16,13 @@ data class ForecastPeriodDto(
     @SerializedName("HasPrecipitation") val hasPrecipitation: Boolean,
     @SerializedName("PrecipitationProbability") val precipitationProbability: Int,
     @SerializedName("HoursOfPrecipitation") val hoursOfPrecipitation: Int,
-    @SerializedName("Rain") val rain: UnitIntDto,
+    @SerializedName("Rain") val rain: UnitDoubleDto,
     @SerializedName("RainProbability") val rainProbability: Int,
     @SerializedName("HoursOfRain") val hoursOfRain: Int,
-    @SerializedName("Snow") val snow: UnitIntDto,
+    @SerializedName("Snow") val snow: UnitDoubleDto,
     @SerializedName("SnowProbability") val snowProbability: Int,
     @SerializedName("HoursOfSnow") val hoursOfSnow: Int,
-    @SerializedName("Ice") val ice: UnitIntDto,
+    @SerializedName("Ice") val ice: UnitDoubleDto,
     @SerializedName("IceProbability") val iceProbability: Int,
     @SerializedName("HoursOfIce") val hoursOfIce: Int,
     @SerializedName("Wind") val wind: WindDto

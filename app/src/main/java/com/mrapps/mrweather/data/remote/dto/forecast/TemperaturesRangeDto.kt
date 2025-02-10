@@ -11,24 +11,28 @@ data class TemperaturesRangeDto(
     @SerializedName("Maximum") val maximum: UnitDoubleDto,
     @SerializedName("Minimum") val minimum: UnitDoubleDto
 ) {
-    fun toTemperaturesRange(metric: Boolean): TemperaturesRange {
-        val (minMetric, minImperial) = convertTemperature(minimum.value, metric)
-        val (maxMetric, maxImperial) = convertTemperature(maximum.value, metric)
+    fun toTemperaturesRange(metric: Boolean): TemperaturesRange? {
+        return if (minimum.value == null || maximum.value == null) {
+            null
+        } else {
+            val (minMetric, minImperial) = convertTemperature(minimum.value, metric)
+            val (maxMetric, maxImperial) = convertTemperature(maximum.value, metric)
 
-        val minimumValue =
-            UnitType.Temperature(
-                metricValue = roundToSingleDecimal(minMetric),
-                imperialValue = roundToSingleDecimal(minImperial)
-            )
-        val maximumValue =
-            UnitType.Temperature(
-                metricValue = roundToSingleDecimal(maxMetric),
-                imperialValue = roundToSingleDecimal(maxImperial)
-            )
+            val minimumValue =
+                UnitType.Temperature(
+                    metricValue = roundToSingleDecimal(minMetric),
+                    imperialValue = roundToSingleDecimal(minImperial)
+                )
+            val maximumValue =
+                UnitType.Temperature(
+                    metricValue = roundToSingleDecimal(maxMetric),
+                    imperialValue = roundToSingleDecimal(maxImperial)
+                )
 
-        return TemperaturesRange(
-            minimum = minimumValue,
-            maximum = maximumValue
-        )
+            TemperaturesRange(
+                minimum = minimumValue,
+                maximum = maximumValue
+            )
+        }
     }
 }

@@ -36,16 +36,10 @@ sealed class UnitType(val metric: Measurement, val imperial: Measurement) {
     )
 }
 
-fun UnitType.formatToString(unitSystemType: UnitSystemType): String {
-    val value = when (unitSystemType) {
-        UnitSystemType.METRIC -> this.metric.value
-        UnitSystemType.IMPERIAL -> this.imperial.value
+fun UnitType.formatToString(unitSystemType: UnitSystemType, appendSpace: Boolean = true): String {
+    val (value, unit) = when (unitSystemType) {
+        UnitSystemType.METRIC -> this.metric.value to this.metric.unit.unit
+        UnitSystemType.IMPERIAL -> this.imperial.value to this.imperial.unit.unit
     }
-
-    val unit = when (unitSystemType) {
-        UnitSystemType.METRIC -> this.metric.unit.unit
-        UnitSystemType.IMPERIAL -> this.imperial.unit.unit
-    }
-
-    return "$value $unit"
+    return if (appendSpace) "$value $unit" else "$value$unit"
 }
