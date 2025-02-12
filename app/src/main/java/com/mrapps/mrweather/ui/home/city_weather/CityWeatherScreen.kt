@@ -51,9 +51,7 @@ import com.mrapps.mrweather.ui.animations.shimmerEffect
 import com.mrapps.mrweather.ui.home.city_weather.components.ForecastInfo
 import com.mrapps.mrweather.ui.util.PreviewObjects
 import com.mrapps.mrweather.ui.home.city_weather.components.WeatherConditionsInfo
-import com.mrapps.mrweather.ui.home.search_city.components.cityPreview
 import com.mrapps.mrweather.ui.theme.MrWeatherTheme
-import com.mrapps.mrweather.ui.util.PreviewObjects.conditionsPreview
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
@@ -266,13 +264,13 @@ fun CityWeatherContentPreview(modifier: Modifier = Modifier) {
     MrWeatherTheme {
         CityWeatherContent(
             state = CityWeatherScreenState(
-                city = cityPreview,
-                weatherConditions = conditionsPreview.copy(
-                    temperature = conditionsPreview.temperature?.copy(
+                city = PreviewObjects.Cities.city,
+                weatherConditions = PreviewObjects.Conditions.conditions.copy(
+                    temperature = PreviewObjects.Conditions.baseTemperature.copy(
                         metricValue = 21.0
                     )
                 ),
-                forecast = PreviewObjects.fiveDaysForecast,
+                forecast = PreviewObjects.Forecast.fiveDaysForecast,
                 isCityLoading = false,
                 isConditionsLoading = false,
                 error = null

@@ -48,8 +48,8 @@ import com.mrapps.mrweather.domain.model.weather_condition.Wind
 import com.mrapps.mrweather.domain.util.formatTimeToString
 import com.mrapps.mrweather.ui.animations.AnimationDurations
 import com.mrapps.mrweather.ui.animations.shimmerEffect
-import com.mrapps.mrweather.ui.util.PreviewObjects.conditionsPreview
 import com.mrapps.mrweather.ui.theme.MrWeatherTheme
+import com.mrapps.mrweather.ui.util.PreviewObjects
 import com.mrapps.mrweather.ui.util.getFontColorWithMetricTemperature
 import java.time.LocalDateTime
 
@@ -419,7 +419,7 @@ private fun PressureDisplay(
 private fun WeatherConditionsInfoPreview() {
     MrWeatherTheme {
         WeatherConditionsInfo(
-            weatherConditionsState = conditionsPreview,
+            weatherConditionsState = PreviewObjects.Conditions.conditions,
             isLoading = false,
         )
     }
@@ -430,15 +430,15 @@ private fun WeatherConditionsInfoPreview() {
 private fun WeatherConditionsInfoColdPreview() {
     MrWeatherTheme {
         WeatherConditionsInfo(
-            weatherConditionsState = conditionsPreview.copy(
-                temperature = UnitType.Temperature(
+            weatherConditionsState = PreviewObjects.Conditions.conditions.copy(
+                temperature = PreviewObjects.Conditions.baseTemperature.copy(
                     metricValue = 9.9,
                     imperialValue = 49.8
                 ),
-                realFeelTemperature = UnitType.Temperature(
+                realFeelTemperature = PreviewObjects.Conditions.baseTemperature.copy(
                     metricValue = -2.7,
                     imperialValue = 27.1
-                ),
+                )
             ),
             isLoading = false,
         )
@@ -450,15 +450,15 @@ private fun WeatherConditionsInfoColdPreview() {
 private fun WeatherConditionsInfoWarmPreview() {
     MrWeatherTheme {
         WeatherConditionsInfo(
-            weatherConditionsState = conditionsPreview.copy(
-                temperature = UnitType.Temperature(
+            weatherConditionsState = PreviewObjects.Conditions.conditions.copy(
+                temperature = PreviewObjects.Conditions.baseTemperature.copy(
                     metricValue = 20.1,
                     imperialValue = 68.2
                 ),
-                realFeelTemperature = UnitType.Temperature(
+                realFeelTemperature = PreviewObjects.Conditions.baseTemperature.copy(
                     metricValue = 19.9,
                     imperialValue = 67.8
-                ),
+                )
             ),
             isLoading = false,
         )

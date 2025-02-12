@@ -23,6 +23,7 @@ import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import com.mrapps.mrweather.domain.model.location.City
 import com.mrapps.mrweather.ui.theme.MrWeatherTheme
+import com.mrapps.mrweather.ui.util.PreviewObjects
 
 @Composable
 fun SearchHistoryItem(
@@ -81,6 +82,6 @@ fun SearchHistoryItem(
 @Composable
 fun SearchHistoryItemPreview(modifier: Modifier = Modifier) {
     MrWeatherTheme {
-        SearchHistoryItem(cityPreview, {})
+        SearchHistoryItem(PreviewObjects.Cities.city, {})
     }
 }

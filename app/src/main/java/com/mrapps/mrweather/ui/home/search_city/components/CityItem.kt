@@ -20,11 +20,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
-import com.mrapps.mrweather.domain.model.location.AdministrativeArea
 import com.mrapps.mrweather.domain.model.location.City
-import com.mrapps.mrweather.domain.model.location.Country
-import com.mrapps.mrweather.domain.model.location.Region
 import com.mrapps.mrweather.ui.theme.MrWeatherTheme
+import com.mrapps.mrweather.ui.util.PreviewObjects
 
 @Composable
 fun CityItem(
@@ -78,25 +76,6 @@ fun CityItem(
 @Composable
 fun CityItemPreview(modifier: Modifier = Modifier) {
     MrWeatherTheme {
-        CityItem(city = cityPreview, onClick = {})
+        CityItem(city = PreviewObjects.Cities.city, onClick = {})
     }
 }
-
-val cityPreview = City(
-    id = "274663",
-    localizedName = "Warszawa",
-    englishName = "Warsaw",
-    administrativeArea = AdministrativeArea(
-        id = "1",
-        localizedName = "Mazowieckie",
-        englishName = "Masovia",
-        localizedType = "Województwo",
-        englishType = "Voivodeship",
-    ),
-    country = Country(
-        id = "1", localizedName = "Polska", englishName = "Poland"
-    ),
-    region = Region(
-        id = "1", localizedName = "Europa", englishName = "Europe"
-    )
-)

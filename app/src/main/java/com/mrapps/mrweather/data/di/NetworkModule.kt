@@ -4,6 +4,7 @@ import com.mrapps.mrweather.BuildConfig
 import com.mrapps.mrweather.Config
 import com.mrapps.mrweather.data.remote.AuthInterceptor
 import com.mrapps.mrweather.data.remote.WeatherApi
+import com.mrapps.mrweather.data.remote.fake.FakeWeatherApi
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -28,11 +29,15 @@ val networkModule = module {
             .build()
     }
     single {
-        Retrofit.Builder()
-            .baseUrl(Config.BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .client(get())
-            .build()
-            .create(WeatherApi::class.java)
+        if(BuildConfig.USE_FAKE_API) {
+            FakeWeatherApi()
+        } else {
+            Retrofit.Builder()
+                .baseUrl(Config.BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(get())
+                .build()
+                .create(WeatherApi::class.java)
+        }
     }
 }

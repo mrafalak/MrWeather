@@ -40,8 +40,8 @@ import com.mrapps.mrweather.ui.home.search_city.components.CityItem
 import com.mrapps.mrweather.ui.home.search_city.components.FullScreenLoadingOverlay
 import com.mrapps.mrweather.ui.home.search_city.components.SearchHistoryItem
 import com.mrapps.mrweather.ui.home.search_city.components.SearchTextField
-import com.mrapps.mrweather.ui.home.search_city.components.cityPreview
 import com.mrapps.mrweather.ui.theme.MrWeatherTheme
+import com.mrapps.mrweather.ui.util.PreviewObjects
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
@@ -228,9 +228,9 @@ fun SearchScreenContentPreview() {
         SearchScreenContent(
             state = SearchCityScreenState(
                 cities = listOf(
-                    cityPreview,
-                    cityPreview,
-                    cityPreview,
+                    PreviewObjects.Cities.city,
+                    PreviewObjects.Cities.city,
+                    PreviewObjects.Cities.city,
                 )
             ),
             onAction = {}
@@ -245,9 +245,9 @@ fun SearchScreenContentLoadingPreview() {
         SearchScreenContent(
             state = SearchCityScreenState(
                 cities = listOf(
-                    cityPreview,
-                    cityPreview,
-                    cityPreview,
+                    PreviewObjects.Cities.city,
+                    PreviewObjects.Cities.city,
+                    PreviewObjects.Cities.city,
                 ),
                 isLoading = true
             ),
@@ -260,12 +260,12 @@ fun SearchScreenContentLoadingPreview() {
 @Composable
 fun SearchScreenContentHistoryPreview() {
     val searchHistory = SearchHistory(
-        cityId = cityPreview.id,
+        cityId = PreviewObjects.Cities.city.id,
         searchTime = LocalDateTime.of(2023, Month.MAY, 7, 14, 30, 0, 0)
     )
     val searchHistoryWithCity = SearchHistoryWithCity(
         searchHistory = searchHistory,
-        city = cityPreview
+        city = PreviewObjects.Cities.city
     )
 
     MrWeatherTheme {

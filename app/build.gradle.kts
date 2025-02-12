@@ -38,6 +38,7 @@ android {
 
         debug {
             buildConfigField("String", "API_KEY", apiKey)
+            buildConfigField("boolean", "USE_FAKE_API", "true")
         }
         release {
             isMinifyEnabled = false
@@ -46,6 +47,7 @@ android {
                 "proguard-rules.pro"
             )
             buildConfigField("String", "API_KEY", apiKey)
+            buildConfigField("boolean", "USE_FAKE_API", "false")
         }
     }
     compileOptions {
