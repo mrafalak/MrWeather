@@ -15,8 +15,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
@@ -34,8 +32,8 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.PreviewLightDark
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import com.mrapps.mrweather.R
 import com.mrapps.mrweather.domain.model.units.UnitSystemType
@@ -47,10 +45,10 @@ import com.mrapps.mrweather.domain.model.weather_condition.WeatherIconType
 import com.mrapps.mrweather.domain.model.weather_condition.Wind
 import com.mrapps.mrweather.domain.util.formatTimeToString
 import com.mrapps.mrweather.ui.animations.AnimationDurations
-import com.mrapps.mrweather.ui.animations.shimmerEffect
-import com.mrapps.mrweather.ui.theme.MrWeatherTheme
-import com.mrapps.mrweather.ui.util.PreviewObjects
+import com.mrapps.mrweather.ui.theme.ThemeWithSurface
+import com.mrapps.mrweather.ui.util.preview.PreviewObjects
 import com.mrapps.mrweather.ui.util.getFontColorWithMetricTemperature
+import com.mrapps.mrweather.ui.util.preview.ThemePreview
 import java.time.LocalDateTime
 
 @Composable
@@ -67,10 +65,14 @@ fun WeatherConditionsInfo(
             .fillMaxWidth()
             .height(220.dp),
     ) {
-        WeatherConditionsLoading(isLoading = isLoading)
-        WeatherConditionsNoData(
-            weatherConditionsIsNull = weatherConditions == null,
-            isLoading = isLoading
+        LoadingBox(
+            isLoading = isLoading,
+            animLabel = "${LOADING_BOX_ANIM_LABEL}: WeatherConditionsInfo"
+        )
+        DataNotFoundBox(
+            dataIsNull = weatherConditions == null,
+            isLoading = isLoading,
+            infoResId = R.string.weather_conditions_no_data_available
         )
         if (weatherConditions != null) {
             WeatherConditionsDisplay(
@@ -83,74 +85,6 @@ fun WeatherConditionsInfo(
 }
 
 @Composable
-private fun WeatherConditionsLoading(
-    modifier: Modifier = Modifier,
-    isLoading: Boolean,
-    animDuration: Int = AnimationDurations.FADE_IN_OUT
-) {
-    AnimatedVisibility(
-        visible = isLoading,
-        enter = fadeIn(animationSpec = tween(animDuration)),
-        exit = fadeOut(animationSpec = tween(animDuration))
-    ) {
-        Box(
-            modifier = modifier
-                .fillMaxSize()
-                .clip(RoundedCornerShape(16.dp))
-                .shimmerEffect(MaterialTheme.colorScheme.onSurface),
-            contentAlignment = Alignment.Center
-        ) {}
-    }
-}
-
-@Composable
-private fun WeatherConditionsNoData(
-    modifier: Modifier = Modifier,
-    weatherConditionsIsNull: Boolean,
-    isLoading: Boolean,
-    animDuration: Int = AnimationDurations.FADE_IN_OUT
-) {
-    val isPreview = LocalInspectionMode.current
-    var hasTriedFetching by remember { mutableStateOf(isPreview) }
-
-    LaunchedEffect(isLoading) {
-        if (isLoading) hasTriedFetching = true
-    }
-
-    AnimatedVisibility(
-        visible = hasTriedFetching && weatherConditionsIsNull && !isLoading,
-        enter = fadeIn(animationSpec = tween(animDuration)),
-        exit = fadeOut(animationSpec = tween(animDuration))
-    ) {
-        Box(
-            modifier = modifier.fillMaxSize(),
-            contentAlignment = Alignment.Center
-        ) {
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
-            ) {
-                Image(
-                    imageVector = Icons.Default.Warning,
-                    contentDescription = stringResource(R.string.no_weather_conditions_data_image),
-                    modifier = Modifier
-                        .size(64.dp)
-                        .padding(bottom = 8.dp),
-                    colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f))
-                )
-                Text(
-                    text = stringResource(R.string.weather_conditions_no_data_available),
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f),
-                    textAlign = TextAlign.Center
-                )
-            }
-        }
-
-    }
-}
-
-@Composable
 private fun WeatherConditionsDisplay(
     modifier: Modifier = Modifier,
     weatherConditions: WeatherConditions,
@@ -159,7 +93,6 @@ private fun WeatherConditionsDisplay(
     animDuration: Int = AnimationDurations.FADE_IN_OUT
 ) {
     val isPreview = LocalInspectionMode.current
-
     var isContentVisible by remember { mutableStateOf(isPreview) }
 
     LaunchedEffect(isLoading, weatherConditions) {
@@ -169,7 +102,8 @@ private fun WeatherConditionsDisplay(
     AnimatedVisibility(
         visible = isContentVisible,
         enter = fadeIn(animationSpec = tween(animDuration)),
-        exit = fadeOut(animationSpec = tween(animDuration))
+        exit = fadeOut(animationSpec = tween(animDuration)),
+        label = "WeatherConditionsDisplayVisibility"
     ) {
         Card(
             modifier = modifier.fillMaxSize(),
@@ -414,69 +348,59 @@ private fun PressureDisplay(
     }
 }
 
-@PreviewLightDark
+@ThemePreview
 @Composable
-private fun WeatherConditionsInfoPreview() {
-    MrWeatherTheme {
+private fun WeatherConditionsInfoDisplayPreview(
+    @PreviewParameter(WeatherConditionsPreviewParameterProvider::class)
+    weatherConditions: WeatherConditions
+) {
+    ThemeWithSurface {
         WeatherConditionsInfo(
-            weatherConditionsState = PreviewObjects.Conditions.conditions,
+            weatherConditionsState = weatherConditions,
             isLoading = false,
         )
     }
 }
 
-@PreviewLightDark
-@Composable
-private fun WeatherConditionsInfoColdPreview() {
-    MrWeatherTheme {
-        WeatherConditionsInfo(
-            weatherConditionsState = PreviewObjects.Conditions.conditions.copy(
-                temperature = PreviewObjects.Conditions.baseTemperature.copy(
-                    metricValue = 9.9,
-                    imperialValue = 49.8
-                ),
-                realFeelTemperature = PreviewObjects.Conditions.baseTemperature.copy(
-                    metricValue = -2.7,
-                    imperialValue = 27.1
-                )
-            ),
-            isLoading = false,
-        )
-    }
-}
-
-@PreviewLightDark
-@Composable
-private fun WeatherConditionsInfoWarmPreview() {
-    MrWeatherTheme {
-        WeatherConditionsInfo(
-            weatherConditionsState = PreviewObjects.Conditions.conditions.copy(
-                temperature = PreviewObjects.Conditions.baseTemperature.copy(
-                    metricValue = 20.1,
-                    imperialValue = 68.2
-                ),
-                realFeelTemperature = PreviewObjects.Conditions.baseTemperature.copy(
-                    metricValue = 19.9,
-                    imperialValue = 67.8
-                )
-            ),
-            isLoading = false,
-        )
-    }
-}
-
-@PreviewLightDark
+@ThemePreview
 @Composable
 private fun WeatherConditionsInfoLoadingPreview() {
-    MrWeatherTheme {
+    ThemeWithSurface {
         WeatherConditionsInfo(isLoading = true)
     }
 }
 
-@PreviewLightDark
+@ThemePreview
 @Composable
 private fun WeatherConditionsInfoNoDataPreview() {
-    MrWeatherTheme {
-        WeatherConditionsInfo()
+    ThemeWithSurface {
+        WeatherConditionsInfo(
+            weatherConditionsState = null,
+            isLoading = false
+        )
     }
+}
+
+private class WeatherConditionsPreviewParameterProvider :
+    PreviewParameterProvider<WeatherConditions> {
+    override val values = sequenceOf(
+        PreviewObjects.Conditions.conditions.copy(
+            temperature = PreviewObjects.Conditions.baseTemperature.copy(
+                metricValue = 9.9,
+                imperialValue = 49.8
+            )
+        ),
+        PreviewObjects.Conditions.conditions.copy(
+            temperature = PreviewObjects.Conditions.baseTemperature.copy(
+                metricValue = 20.1,
+                imperialValue = 68.2
+            )
+        ),
+        PreviewObjects.Conditions.conditions.copy(
+            temperature = PreviewObjects.Conditions.baseTemperature.copy(
+                metricValue = 10.0,
+                imperialValue = 68.2
+            )
+        )
+    )
 }

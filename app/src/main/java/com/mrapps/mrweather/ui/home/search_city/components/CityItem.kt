@@ -18,11 +18,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import com.mrapps.mrweather.domain.model.location.City
-import com.mrapps.mrweather.ui.theme.MrWeatherTheme
-import com.mrapps.mrweather.ui.util.PreviewObjects
+import com.mrapps.mrweather.ui.theme.ThemeWithSurface
+import com.mrapps.mrweather.ui.util.preview.PreviewObjects
+import com.mrapps.mrweather.ui.util.preview.ThemePreview
 
 @Composable
 fun CityItem(
@@ -72,10 +72,10 @@ fun CityItem(
     }
 }
 
-@PreviewLightDark
+@ThemePreview
 @Composable
 fun CityItemPreview(modifier: Modifier = Modifier) {
-    MrWeatherTheme {
+    ThemeWithSurface {
         CityItem(city = PreviewObjects.Cities.city, onClick = {})
     }
 }

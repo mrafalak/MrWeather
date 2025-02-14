@@ -29,7 +29,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import com.mrapps.mrweather.R
 import com.mrapps.mrweather.domain.model.SearchHistory
@@ -40,8 +39,9 @@ import com.mrapps.mrweather.ui.home.search_city.components.CityItem
 import com.mrapps.mrweather.ui.home.search_city.components.FullScreenLoadingOverlay
 import com.mrapps.mrweather.ui.home.search_city.components.SearchHistoryItem
 import com.mrapps.mrweather.ui.home.search_city.components.SearchTextField
-import com.mrapps.mrweather.ui.theme.MrWeatherTheme
-import com.mrapps.mrweather.ui.util.PreviewObjects
+import com.mrapps.mrweather.ui.theme.ThemeWithSurface
+import com.mrapps.mrweather.ui.util.preview.PreviewObjects
+import com.mrapps.mrweather.ui.util.preview.ThemePreview
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
@@ -171,7 +171,8 @@ private fun SearchedCities(
     AnimatedVisibility(
         visible = cities.isNotEmpty(),
         enter = fadeIn(animationSpec = tween(animDuration)) + slideInVertically(initialOffsetY = { -100 }),
-        exit = fadeOut(animationSpec = tween(animDuration))
+        exit = fadeOut(animationSpec = tween(animDuration)),
+        label = "SearchedCitiesVisibility"
     ) {
         LazyColumn(
             modifier = modifier
@@ -201,7 +202,8 @@ fun SearchHistoryDisplay(
     AnimatedVisibility(
         visible = visible,
         enter = fadeIn(animationSpec = tween(animDuration)),
-        exit = fadeOut(animationSpec = tween(animDuration))
+        exit = fadeOut(animationSpec = tween(animDuration)),
+        label = "SearchHistoryVisibility"
     ) {
         Column(modifier = modifier.padding(top = 8.dp)) {
             Text(
@@ -221,10 +223,10 @@ fun SearchHistoryDisplay(
     }
 }
 
-@PreviewLightDark
+@ThemePreview
 @Composable
 fun SearchScreenContentPreview() {
-    MrWeatherTheme {
+    ThemeWithSurface {
         SearchScreenContent(
             state = SearchCityScreenState(
                 cities = listOf(
@@ -238,10 +240,10 @@ fun SearchScreenContentPreview() {
     }
 }
 
-@PreviewLightDark
+@ThemePreview
 @Composable
 fun SearchScreenContentLoadingPreview() {
-    MrWeatherTheme {
+    ThemeWithSurface {
         SearchScreenContent(
             state = SearchCityScreenState(
                 cities = listOf(
@@ -256,7 +258,7 @@ fun SearchScreenContentLoadingPreview() {
     }
 }
 
-@PreviewLightDark
+@ThemePreview
 @Composable
 fun SearchScreenContentHistoryPreview() {
     val searchHistory = SearchHistory(
@@ -268,7 +270,7 @@ fun SearchScreenContentHistoryPreview() {
         city = PreviewObjects.Cities.city
     )
 
-    MrWeatherTheme {
+    ThemeWithSurface {
         SearchScreenContent(
             onAction = {},
             state = SearchCityScreenState(

@@ -1,4 +1,4 @@
-package com.mrapps.mrweather.ui.util
+package com.mrapps.mrweather.ui.util.preview
 
 import com.mrapps.mrweather.domain.model.forecast.DailyForecast
 import com.mrapps.mrweather.domain.model.forecast.ForecastPeriod

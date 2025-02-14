@@ -18,6 +18,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.mrapps.mrweather.domain.model.weather_condition.WeatherIconType
+import com.mrapps.mrweather.ui.theme.ThemeWithSurface
+import com.mrapps.mrweather.ui.util.preview.ThemePreview
 
 @Composable
 fun WeatherImage(
@@ -41,6 +43,16 @@ fun WeatherImage(
             text = stringResource(id = weatherType.stringResId),
             style = MaterialTheme.typography.labelSmall,
             textAlign = TextAlign.Center
+        )
+    }
+}
+
+@ThemePreview
+@Composable
+private fun WeatherImagePreview() {
+    ThemeWithSurface(modifier = Modifier.size(200.dp)) {
+        WeatherImage(
+            weatherType = WeatherIconType.SUNNY_CLEAR
         )
     }
 }

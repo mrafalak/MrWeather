@@ -19,11 +19,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import com.mrapps.mrweather.domain.model.location.City
-import com.mrapps.mrweather.ui.theme.MrWeatherTheme
-import com.mrapps.mrweather.ui.util.PreviewObjects
+import com.mrapps.mrweather.ui.theme.ThemeWithSurface
+import com.mrapps.mrweather.ui.util.preview.PreviewObjects
+import com.mrapps.mrweather.ui.util.preview.ThemePreview
 
 @Composable
 fun SearchHistoryItem(
@@ -78,10 +78,10 @@ fun SearchHistoryItem(
     }
 }
 
-@PreviewLightDark
+@ThemePreview
 @Composable
-fun SearchHistoryItemPreview(modifier: Modifier = Modifier) {
-    MrWeatherTheme {
+private fun SearchHistoryItemPreview(modifier: Modifier = Modifier) {
+    ThemeWithSurface {
         SearchHistoryItem(PreviewObjects.Cities.city, {})
     }
 }

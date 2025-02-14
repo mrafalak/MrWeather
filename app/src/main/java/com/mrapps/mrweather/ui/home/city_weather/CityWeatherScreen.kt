@@ -15,7 +15,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Warning
@@ -42,16 +44,16 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import com.mrapps.mrweather.R
 import com.mrapps.mrweather.domain.model.location.City
 import com.mrapps.mrweather.ui.animations.AnimationDurations
 import com.mrapps.mrweather.ui.animations.shimmerEffect
 import com.mrapps.mrweather.ui.home.city_weather.components.ForecastInfo
-import com.mrapps.mrweather.ui.util.PreviewObjects
+import com.mrapps.mrweather.ui.util.preview.PreviewObjects
 import com.mrapps.mrweather.ui.home.city_weather.components.WeatherConditionsInfo
-import com.mrapps.mrweather.ui.theme.MrWeatherTheme
+import com.mrapps.mrweather.ui.theme.ThemeWithSurface
+import com.mrapps.mrweather.ui.util.preview.ThemePreview
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
@@ -116,6 +118,7 @@ fun CityWeatherContent(
             modifier = Modifier
                 .padding(innerPaddings)
                 .padding(8.dp)
+                .verticalScroll(rememberScrollState())
         ) {
             WeatherConditionsInfo(
                 weatherConditionsState = state.weatherConditions,
@@ -123,7 +126,7 @@ fun CityWeatherContent(
             )
             ForecastInfo(
                 modifier = Modifier.padding(top = 16.dp),
-                forecast = state.forecast,
+                forecastState = state.forecast,
                 isLoading = state.isForecastLoading,
                 unitSystemType = state.unitSystemType
             )
@@ -174,7 +177,8 @@ fun TopBarLoading(
     AnimatedVisibility(
         visible = isCityLoading,
         enter = fadeIn(animationSpec = tween(animDuration)),
-        exit = fadeOut(animationSpec = tween(animDuration))
+        exit = fadeOut(animationSpec = tween(animDuration)),
+        label = "TopBarTitleLoadingVisibility"
     ) {
         Box(
             modifier = modifier
@@ -203,7 +207,8 @@ fun TopBarError(
     AnimatedVisibility(
         visible = hasTriedFetching && !isCityLoading && isCityNull,
         enter = fadeIn(animationSpec = tween(animDuration)) + slideInVertically { it },
-        exit = fadeOut(animationSpec = tween(animDuration)) + slideOutVertically { -it }
+        exit = fadeOut(animationSpec = tween(animDuration)) + slideOutVertically { -it },
+        label = "TopBarErrorVisibility"
     ) {
         Row(
             modifier = modifier.fillMaxSize(),
@@ -235,7 +240,8 @@ fun TopBarCity(
     AnimatedVisibility(
         visible = !isCityLoading && city != null,
         enter = fadeIn(animationSpec = tween(animDuration)) + slideInVertically { it },
-        exit = fadeOut(animationSpec = tween(animDuration)) + slideOutVertically { -it }
+        exit = fadeOut(animationSpec = tween(animDuration)) + slideOutVertically { -it },
+        label = "TopBarCityVisibility"
     ) {
         Column(modifier = modifier.fillMaxSize()) {
             Text(
@@ -258,10 +264,10 @@ fun TopBarCity(
     }
 }
 
-@PreviewLightDark
+@ThemePreview
 @Composable
 fun CityWeatherContentPreview(modifier: Modifier = Modifier) {
-    MrWeatherTheme {
+    ThemeWithSurface {
         CityWeatherContent(
             state = CityWeatherScreenState(
                 city = PreviewObjects.Cities.city,
@@ -279,10 +285,10 @@ fun CityWeatherContentPreview(modifier: Modifier = Modifier) {
     }
 }
 
-@PreviewLightDark
+@ThemePreview
 @Composable
 fun CityWeatherContentLoadingPreview(modifier: Modifier = Modifier) {
-    MrWeatherTheme {
+    ThemeWithSurface {
         CityWeatherContent(
             state = CityWeatherScreenState(
                 isCityLoading = true,
@@ -292,10 +298,10 @@ fun CityWeatherContentLoadingPreview(modifier: Modifier = Modifier) {
     }
 }
 
-@PreviewLightDark
+@ThemePreview
 @Composable
 fun CityWeatherContentNoDataPreview(modifier: Modifier = Modifier) {
-    MrWeatherTheme {
+    ThemeWithSurface {
         CityWeatherContent(state = CityWeatherScreenState()) { }
     }
 }

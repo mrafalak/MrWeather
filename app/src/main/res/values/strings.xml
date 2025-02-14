@@ -25,8 +25,6 @@
     <string name="precipitation_type_mixed">Mieszane</string>
     <string name="precipitation_type_none">Brak</string>
     <string name="precipitation_type_unknown">Nieznane</string>
-    <string name="no_weather_conditions_data_image">Brak danych pogodowych</string>
-    <string name="no_forecast_data_image">Brak danych o prognozie</string>
     <string name="weather_sunny">Słonecznie</string>
     <string name="weather_mostly_sunny">Przeważnie słonecznie</string>
     <string name="weather_partly_sunny">Częściowo słonecznie</string>

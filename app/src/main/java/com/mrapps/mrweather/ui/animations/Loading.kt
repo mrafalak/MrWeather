@@ -38,7 +38,7 @@ fun Modifier.shimmerEffect(
         )
     }
 
-    val transition = rememberInfiniteTransition(label = "Shimmer Transition")
+    val transition = rememberInfiniteTransition(label = "ShimmerTransition")
     val translateAnim = transition.animateFloat(
         initialValue = -200f,
         targetValue = screenWidthPx + 200f,
@@ -49,7 +49,7 @@ fun Modifier.shimmerEffect(
                 easing = LinearEasing
             ),
             repeatMode = RepeatMode.Restart
-        ), label = "Shimmer Transition"
+        ), label = "ShimmerTransition"
     )
 
     val brush = Brush.linearGradient(

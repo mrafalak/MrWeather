@@ -23,7 +23,7 @@ class FakeWeatherApi : WeatherApi {
         language: LanguageEnum,
         details: Boolean
     ): List<WeatherConditionsDto> {
-        delay(1000)
+        delay(2000)
         return listOf(FakeDtoObjects.Conditions.conditionsDto)
     }
 

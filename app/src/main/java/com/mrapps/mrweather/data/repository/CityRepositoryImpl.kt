@@ -15,6 +15,7 @@ import com.mrapps.mrweather.domain.model.SearchHistoryWithCity
 import com.mrapps.mrweather.domain.model.location.City
 import com.mrapps.mrweather.domain.model.util.Result
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import java.time.LocalDateTime
@@ -72,6 +73,8 @@ class CityRepositoryImpl(
 
             is Result.Exception -> emit(cityResult)
         }
+    }.catch {
+        emit(Result.Exception(it))
     }
 
     private suspend fun saveOrUpdateSearch(cityId: String): Result<Unit> {
