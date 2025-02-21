@@ -17,10 +17,10 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.tooling.preview.PreviewLightDark
 import com.mrapps.mrweather.R
-import com.mrapps.mrweather.ui.theme.MrWeatherTheme
+import com.mrapps.mrweather.ui.theme.ThemeWithSurface
 import com.mrapps.mrweather.ui.util.lettersWithSpacesRegex
+import com.mrapps.mrweather.ui.util.preview.ThemePreview
 
 @Composable
 fun SearchTextField(
@@ -82,10 +82,10 @@ fun SearchTextField(
     )
 }
 
-@PreviewLightDark
+@ThemePreview
 @Composable
-fun SearchTextFieldPreview() {
-    MrWeatherTheme {
+private fun SearchTextFieldPreview() {
+    ThemeWithSurface {
         SearchTextField(
             "",
             onQueryChanged = {},
@@ -94,10 +94,10 @@ fun SearchTextFieldPreview() {
     }
 }
 
-@PreviewLightDark
+@ThemePreview
 @Composable
-fun FilledSearchTextFieldPreview() {
-    MrWeatherTheme {
+private fun FilledSearchTextFieldPreview() {
+    ThemeWithSurface {
         SearchTextField(
             "Warszawa",
             onQueryChanged = {},

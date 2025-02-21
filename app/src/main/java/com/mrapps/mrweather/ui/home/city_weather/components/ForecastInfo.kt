@@ -5,7 +5,6 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInHorizontally
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -17,13 +16,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
@@ -34,16 +29,14 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import com.mrapps.mrweather.R
 import com.mrapps.mrweather.domain.model.forecast.DailyForecast
@@ -51,10 +44,11 @@ import com.mrapps.mrweather.domain.model.forecast.TemperaturesRange
 import com.mrapps.mrweather.domain.model.units.UnitSystemType
 import com.mrapps.mrweather.domain.model.weather_condition.WeatherIconType
 import com.mrapps.mrweather.ui.animations.AnimationDurations
-import com.mrapps.mrweather.ui.animations.shimmerEffect
-import com.mrapps.mrweather.ui.theme.MrWeatherTheme
-import com.mrapps.mrweather.ui.util.PreviewObjects
+import com.mrapps.mrweather.ui.animations.AnimationDurations.SLIDE_IN_HORIZONTALLY
+import com.mrapps.mrweather.ui.theme.ThemeWithSurface
+import com.mrapps.mrweather.ui.util.preview.PreviewObjects
 import com.mrapps.mrweather.ui.util.getFontColorWithMetricTemperature
+import com.mrapps.mrweather.ui.util.preview.ThemePreview
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Locale
@@ -62,121 +56,59 @@ import java.util.Locale
 @Composable
 fun ForecastInfo(
     modifier: Modifier = Modifier,
-    forecast: List<DailyForecast>? = null,
+    forecastState: List<DailyForecast>? = null,
     isLoading: Boolean,
     unitSystemType: UnitSystemType,
 ) {
-    Column(
+    val forecast = remember(forecastState?.size) { forecastState }
+
+    Box(
         modifier
             .fillMaxWidth()
-            .height(300.dp),
-        verticalArrangement = Arrangement.Center
+            .height(300.dp)
     ) {
-        ForecastLoading(isLoading = isLoading)
-        ForecastNoData(
-            forecastIsNull = forecast == null,
-            isLoading = isLoading
+        LoadingBox(
+            isLoading = isLoading,
+            animLabel = "${LOADING_BOX_ANIM_LABEL}: ForecastInfo"
+        )
+        DataNotFoundBox(
+            dataIsNull = forecast == null,
+            isLoading = isLoading,
+            infoResId = R.string.forecast_no_data_available
         )
         if (forecast != null) {
             ForecastDisplay(
                 forecast = forecast,
-                isLoading = isLoading,
-                unitSystemType = unitSystemType
+                unitSystemType = unitSystemType,
+                isLoading = isLoading
             )
         }
     }
 }
 
 @Composable
-fun ForecastLoading(
-    modifier: Modifier = Modifier,
-    isLoading: Boolean,
-    animDuration: Int = AnimationDurations.FADE_IN_OUT
-) {
-    AnimatedVisibility(
-        visible = isLoading,
-        enter = fadeIn(animationSpec = tween(animDuration)),
-        exit = fadeOut(animationSpec = tween(animDuration))
-    ) {
-        Box(
-            modifier = modifier
-                .fillMaxSize()
-                .clip(RoundedCornerShape(16.dp))
-                .shimmerEffect(MaterialTheme.colorScheme.onSurface),
-            contentAlignment = Alignment.Center
-        ) {}
-    }
-}
-
-@Composable
-fun ForecastNoData(
-    modifier: Modifier = Modifier,
-    forecastIsNull: Boolean,
-    isLoading: Boolean,
-    animDuration: Int = AnimationDurations.FADE_IN_OUT
-) {
-    val isPreview = LocalInspectionMode.current
-    var hasTriedFetching by remember { mutableStateOf(isPreview) }
-
-    LaunchedEffect(isLoading) {
-        if (isLoading) hasTriedFetching = true
-    }
-
-    AnimatedVisibility(
-        visible = hasTriedFetching && forecastIsNull && !isLoading,
-        enter = fadeIn(animationSpec = tween(animDuration)),
-        exit = fadeOut(animationSpec = tween(animDuration))
-    ) {
-        Box(
-            modifier = modifier.fillMaxSize(),
-            contentAlignment = Alignment.Center
-        ) {
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
-            ) {
-                Image(
-                    imageVector = Icons.Default.Warning,
-                    contentDescription = stringResource(R.string.no_forecast_data_image),
-                    modifier = Modifier
-                        .size(64.dp)
-                        .padding(bottom = 8.dp),
-                    colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f))
-                )
-                Text(
-                    text = stringResource(R.string.forecast_no_data_available),
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f),
-                    textAlign = TextAlign.Center
-                )
-            }
-        }
-
-    }
-}
-
-@Composable
-fun ForecastDisplay(
+private fun ForecastDisplay(
     modifier: Modifier = Modifier,
     forecast: List<DailyForecast>,
-    isLoading: Boolean,
     unitSystemType: UnitSystemType,
+    isLoading: Boolean,
     animDuration: Int = AnimationDurations.FADE_IN_OUT
 ) {
     val isPreview = LocalInspectionMode.current
-
-    var isContentVisible by remember { mutableStateOf(isPreview) }
+    var isContentVisible by rememberSaveable { mutableStateOf(isPreview) }
 
     LaunchedEffect(isLoading, forecast) {
-        isContentVisible = !isLoading
+        isContentVisible = !isLoading && forecast.isNotEmpty()
     }
 
     AnimatedVisibility(
         visible = isContentVisible,
         enter = fadeIn(animationSpec = tween(animDuration)) + slideInHorizontally(
-            initialOffsetX = { -it }
+            initialOffsetX = { -it },
+            animationSpec = tween(SLIDE_IN_HORIZONTALLY)
         ),
-        exit = fadeOut(animationSpec = tween(animDuration))
+        exit = fadeOut(animationSpec = tween(animDuration)),
+        label = "ForecastDisplayVisibility"
     ) {
         LazyRow(
             modifier = modifier
@@ -195,7 +127,7 @@ fun ForecastDisplay(
 }
 
 @Composable
-fun ForecastDay(
+private fun ForecastDay(
     modifier: Modifier = Modifier,
     dailyForecast: DailyForecast,
     unitSystemType: UnitSystemType
@@ -216,7 +148,11 @@ fun ForecastDay(
             verticalArrangement = Arrangement.SpaceBetween
         ) {
             if (dailyForecast.temperatures == null || dailyForecast.realFeelTemperature == null || dailyForecast.realFeelTemperatureShade == null) {
-                ForecastNoData(forecastIsNull = true, isLoading = false)
+                DataNotFoundBox(
+                    dataIsNull = true,
+                    isLoading = false,
+                    infoResId = R.string.forecast_no_data_available
+                )
             } else {
                 DateDisplay(date = dailyForecast.date)
                 Spacer(modifier = Modifier.height(8.dp))
@@ -268,7 +204,7 @@ private fun DateDisplay(
 }
 
 @Composable
-fun DayNightImages(
+private fun DayNightImages(
     modifier: Modifier = Modifier,
     dayIcon: WeatherIconType,
     nightIcon: WeatherIconType,
@@ -329,7 +265,7 @@ private fun TemperatureDisplay(
 }
 
 @Composable
-fun RealFeelTemperatureDisplay(
+private fun RealFeelTemperatureDisplay(
     modifier: Modifier = Modifier,
     temperatures: TemperaturesRange,
     unitSystemType: UnitSystemType
@@ -351,7 +287,7 @@ fun RealFeelTemperatureDisplay(
 }
 
 @Composable
-fun RealFeelShadeTemperatureDisplay(
+private fun RealFeelShadeTemperatureDisplay(
     modifier: Modifier = Modifier,
     temperatures: TemperaturesRange,
     unitSystemType: UnitSystemType
@@ -373,7 +309,7 @@ fun RealFeelShadeTemperatureDisplay(
 }
 
 @Composable
-fun TemperatureLabel(
+private fun TemperatureLabel(
     modifier: Modifier = Modifier,
     label: String, temperature: String
 ) {
@@ -398,7 +334,7 @@ fun TemperatureLabel(
 }
 
 @Composable
-fun getTemperatureValues(
+private fun getTemperatureValues(
     unitSystemType: UnitSystemType,
     temperaturesRange: TemperaturesRange
 ): Pair<Double, Double> {
@@ -413,7 +349,7 @@ fun getTemperatureValues(
 }
 
 @Composable
-fun getTemperatureUnits(
+private fun getTemperatureUnits(
     unitSystemType: UnitSystemType,
     temperaturesRange: TemperaturesRange
 ): Pair<String, String> {
@@ -428,24 +364,36 @@ fun getTemperatureUnits(
 }
 
 
-@PreviewLightDark
+@ThemePreview
 @Composable
-fun ForecastInfoPreview() {
-    MrWeatherTheme {
+private fun ForecastInfoPreview() {
+    ThemeWithSurface {
         ForecastInfo(
-            forecast = PreviewObjects.Forecast.fiveDaysForecast,
+            forecastState = PreviewObjects.Forecast.fiveDaysForecast,
             isLoading = false,
             unitSystemType = UnitSystemType.METRIC
         )
     }
 }
 
-@PreviewLightDark
+@ThemePreview
 @Composable
-fun ForecastDayPreview() {
-    MrWeatherTheme {
+private fun ForecastDayPreview() {
+    ThemeWithSurface {
         ForecastDay(
             dailyForecast = PreviewObjects.Forecast.fiveDaysForecast[0],
+            unitSystemType = UnitSystemType.METRIC
+        )
+    }
+}
+
+@ThemePreview
+@Composable
+private fun ForecastInfoNoDataPreview(modifier: Modifier = Modifier) {
+    ThemeWithSurface {
+        ForecastInfo(
+            forecastState = null,
+            isLoading = false,
             unitSystemType = UnitSystemType.METRIC
         )
     }
