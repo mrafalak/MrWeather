@@ -1,14 +1,15 @@
 package com.mrapps.mrweather.ui.util
 
-import com.mrapps.mrweather.data.remote.dto.forecast.DailyForecastDto
-import com.mrapps.mrweather.data.remote.dto.forecast.ForecastPeriodDto
-import com.mrapps.mrweather.data.remote.dto.forecast.MoonDto
-import com.mrapps.mrweather.data.remote.dto.forecast.RelativeHumidityDto
-import com.mrapps.mrweather.data.remote.dto.forecast.SunDto
-import com.mrapps.mrweather.data.remote.dto.forecast.TemperaturesRangeDto
-import com.mrapps.mrweather.data.remote.dto.unit.UnitDoubleDto
-import com.mrapps.mrweather.data.remote.dto.weather_condition.DirectionDto
-import com.mrapps.mrweather.data.remote.dto.weather_condition.WindDto
+import com.mrapps.mrweather.domain.model.forecast.DailyForecast
+import com.mrapps.mrweather.domain.model.forecast.ForecastPeriod
+import com.mrapps.mrweather.domain.model.forecast.Moon
+import com.mrapps.mrweather.domain.model.forecast.RelativeHumidity
+import com.mrapps.mrweather.domain.model.forecast.Sun
+import com.mrapps.mrweather.domain.model.forecast.TemperaturesRange
+import com.mrapps.mrweather.domain.model.location.AdministrativeArea
+import com.mrapps.mrweather.domain.model.location.City
+import com.mrapps.mrweather.domain.model.location.Country
+import com.mrapps.mrweather.domain.model.location.Region
 import com.mrapps.mrweather.domain.model.units.UnitType
 import com.mrapps.mrweather.domain.model.weather_condition.Direction
 import com.mrapps.mrweather.domain.model.weather_condition.PrecipitationType
@@ -19,133 +20,160 @@ import com.mrapps.mrweather.domain.model.weather_condition.Wind
 import java.time.LocalDateTime
 
 object PreviewObjects {
-    val baseForecastDto = DailyForecastDto(
-        date = "2025-02-11T07:00:00+01:00",
-        epochDate = 1739253600,
-        temperatures = TemperaturesRangeDto(
-            maximum = UnitDoubleDto(unit = "°C", unitType = 17, value = 10.1),
-            minimum = UnitDoubleDto(unit = "°C", unitType = 17, value = -1.1)
-        ),
-        realFeelTemperature = TemperaturesRangeDto(
-            maximum = UnitDoubleDto(unit = "°C", unitType = 17, value = 4.99),
-            minimum = UnitDoubleDto(unit = "°C", unitType = 17, value = -3.22)
-        ),
-        realFeelTemperatureShade = TemperaturesRangeDto(
-            maximum = UnitDoubleDto(unit = "°C", unitType = 17, value = 3.0),
-            minimum = UnitDoubleDto(unit = "°C", unitType = 17, value = -4.0)
-        ),
-        day = ForecastPeriodDto(
-            icon = 13,
-            iconPhrase = "Częściowe zachmurzenie",
-            shortPhrase = "Chłodno i słonecznie",
-            longPhrase = "Słoneczny dzień z okresowymi chmurami, chłodno",
-            cloudCover = 30,
-            relativeHumidity = RelativeHumidityDto(average = 70, maximum = 85, minimum = 55),
+    object Cities {
+        val baseAdministrativeArea = AdministrativeArea(
+            id = "1",
+            localizedName = "Mazowieckie",
+            englishName = "Masovia",
+            localizedType = "Województwo",
+            englishType = "Voivodeship"
+        )
+        val baseCountry = Country(
+            id = "1",
+            localizedName = "Polska",
+            englishName = "Poland"
+        )
+        val baseRegion = Region(
+            id = "1",
+            localizedName = "Europa",
+            englishName = "Europe"
+        )
+        val city = City(
+            id = "274663",
+            localizedName = "Warszawa",
+            englishName = "Warsaw",
+            administrativeArea = baseAdministrativeArea,
+            country = baseCountry,
+            region = baseRegion
+        )
+    }
+
+    object Conditions {
+        val baseTemperature = UnitType.Temperature(
+            metricValue = 11.0,
+            imperialValue = 51.8
+        )
+        val basePressure = UnitType.Pressure(
+            mb = 1018.0,
+            inHg = 30.0
+        )
+        val baseSpeed = UnitType.Speed(
+            kmh = 18.0,
+            mph = 18.0 * 0.621371
+        )
+        val baseDirection = Direction(
+            degrees = 250,
+            english = "W",
+            localized = "Z"
+        )
+        val baseWind = Wind(
+            direction = baseDirection,
+            speed = baseSpeed
+        )
+        val conditions = WeatherConditions(
+            weatherText = "Zachmurzenie",
+            weatherIcon = WeatherIconType.CLOUDY,
+            temperature = baseTemperature,
+            realFeelTemperature = baseTemperature,
+            realFeelTemperatureShade = baseTemperature,
+            relativeHumidity = 82,
             hasPrecipitation = false,
-            precipitationProbability = 10,
-            hoursOfPrecipitation = 0.0,
-            rain = UnitDoubleDto(unit = "mm", unitType = 20, value = 0.0),
-            rainProbability = 5,
-            hoursOfRain = 0.0,
-            snow = UnitDoubleDto(unit = "cm", unitType = 19, value = 0.0),
-            snowProbability = 20,
-            hoursOfSnow = 0,
-            ice = UnitDoubleDto(unit = "mm", unitType = 20, value = 0.0),
-            iceProbability = 5,
-            hoursOfIce = 0,
-            wind = WindDto(
-                direction = DirectionDto(
-                    degrees = 180,
-                    english = "South",
-                    localized = "Południowy"
-                ),
-                speed = UnitDoubleDto(
-                    unit = "km/h", unitType = 7, value = 15.0
-                )
+            precipitationType = PrecipitationType.NONE,
+            wind = baseWind,
+            cloudCover = 60,
+            pressure = basePressure,
+            pressureTendency = PressureTendency.STEADY,
+            localObservationDateTime = LocalDateTime.of(2025, 2, 9, 20, 36, 0),
+            epochTime = 1733800200
+        )
+    }
+
+    object Forecast {
+        val baseTemperature = UnitType.Temperature(
+            metricValue = 10.1,
+            imperialValue = 10.1 * 1.8 + 32
+        )
+        val baseTemperatures = TemperaturesRange(
+            maximum = baseTemperature,
+            minimum = baseTemperature.copy(metricValue = 9.9, imperialValue = 9.9 * 1.8 + 32)
+        )
+        val baseRelativeHumidity = RelativeHumidity(
+            average = 70,
+            maximum = 85,
+            minimum = 55
+        )
+        val baseRain = UnitType.SmallLength(
+            mm = 0.0,
+            inch = 0.0
+        )
+        val baseSnow = UnitType.Length(
+            cm = 0.0,
+            inch = 0.0
+        )
+        val baseWind = Wind(
+            direction = Direction(
+                degrees = 180,
+                english = "South",
+                localized = "Południowy"
+            ),
+            speed = UnitType.Speed(
+                kmh = 15.0,
+                mph = 15.0 * 0.621371
             )
-        ),
-        night = ForecastPeriodDto(
-            icon = 33,
-            iconPhrase = "Przeważnie bezchmurnie",
-            shortPhrase = "Zimno i przejrzyście",
-            longPhrase = "Bezchmurna noc, zimno",
-            cloudCover = 10,
-            relativeHumidity = RelativeHumidityDto(average = 80, maximum = 90, minimum = 70),
-            hasPrecipitation = false,
-            precipitationProbability = 5,
-            hoursOfPrecipitation = 0.0,
-            rain = UnitDoubleDto(unit = "mm", unitType = 20, value = 0.0),
-            rainProbability = 2,
-            hoursOfRain = 0.0,
-            snow = UnitDoubleDto(unit = "cm", unitType = 19, value = 0.0),
-            snowProbability = 15,
-            hoursOfSnow = 0,
-            ice = UnitDoubleDto(unit = "mm", unitType = 20, value = 0.0),
-            iceProbability = 3,
-            hoursOfIce = 0,
-            wind = WindDto(
-                direction = DirectionDto(degrees = 270, english = "West", localized = "Zachodni"),
-                speed = UnitDoubleDto(
-                    unit = "km/h", unitType = 7, value = 15.0
-                )
-            )
-        ),
-        sun = SunDto(epochRise = 1733750400, epochSet = 1733793600, rise = "07:30", set = "16:30"),
-        moon = MoonDto(
+        )
+        val baseSun = Sun(
+            epochRise = 1733750400,
+            epochSet = 1733793600,
+            rise = "07:30",
+            set = "16:30"
+        )
+        val baseMoon = Moon(
+            age = 10,
             epochRise = 1733790000,
             epochSet = 1733828400,
             phase = "Ubywający Księżyc",
             rise = "16:00",
-            set = "02:00",
-            age = 10
+            set = "02:00"
         )
-    )
-    val baseForecast = baseForecastDto.toDailyForecast(true)
-
-    val fiveDaysForecast = listOf(
-        baseForecast,
-        baseForecast,
-        baseForecast,
-        baseForecast,
-        baseForecast,
-    )
-
-    val conditionsPreview = WeatherConditions(
-        weatherText = "Zachmurzenie",
-        weatherIcon = WeatherIconType.CLOUDY,
-        temperature = UnitType.Temperature(
-            metricValue = 11.0,
-            imperialValue = 51.8
-        ),
-        realFeelTemperature = UnitType.Temperature(
-            metricValue = -2.7,
-            imperialValue = 27.1
-        ),
-        realFeelTemperatureShade = UnitType.Temperature(
-            metricValue = -5.0,
-            imperialValue = 23.0
-        ),
-        relativeHumidity = 82,
-        hasPrecipitation = false,
-        precipitationType = PrecipitationType.NONE,
-        wind = Wind(
-            direction = Direction(
-                degrees = 250,
-                english = "W",
-                localized = "Z"
+        val baseForecastPeriod = ForecastPeriod(
+            icon = WeatherIconType.SUNNY_CLEAR,
+            shortPhrase = "Chłodno i słonecznie",
+            cloudCover = 30,
+            relativeHumidity = baseRelativeHumidity,
+            hasPrecipitation = false,
+            precipitationProbability = 10,
+            hoursOfPrecipitation = 0.0,
+            rain = baseRain,
+            rainProbability = 5,
+            hoursOfRain = 0.0,
+            snow = baseSnow,
+            snowProbability = 20,
+            hoursOfSnow = 0,
+            ice = baseRain,
+            iceProbability = 5,
+            hoursOfIce = 0,
+            wind = baseWind
+        )
+        val baseForecast = DailyForecast(
+            date = LocalDateTime.of(2025, 2, 11, 7, 0),
+            epochDate = 1739253600,
+            temperatures = baseTemperatures,
+            realFeelTemperature = baseTemperatures,
+            realFeelTemperatureShade = baseTemperatures,
+            day = baseForecastPeriod,
+            night = baseForecastPeriod.copy(
+                icon = WeatherIconType.NIGHT_CLEAR,
+                shortPhrase = "Zimno i przejrzyście"
             ),
-            speed = UnitType.Speed(
-                kmh = 18.0,
-                mph = 11.2
-            )
-        ),
-        cloudCover = 60,
-        pressure = UnitType.Pressure(
-            mb = 1018.0,
-            inHg = 30.0
-        ),
-        pressureTendency = PressureTendency.STEADY,
-        localObservationDateTime = LocalDateTime.of(2025, 2, 9, 20, 36, 0),
-        epochTime = 1733800200
-    )
+            sun = baseSun,
+            moon = baseMoon
+        )
+        val fiveDaysForecast = listOf(
+            baseForecast,
+            baseForecast,
+            baseForecast,
+            baseForecast,
+            baseForecast,
+        )
+    }
 }

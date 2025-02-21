@@ -433,7 +433,7 @@ fun getTemperatureUnits(
 fun ForecastInfoPreview() {
     MrWeatherTheme {
         ForecastInfo(
-            forecast = PreviewObjects.fiveDaysForecast,
+            forecast = PreviewObjects.Forecast.fiveDaysForecast,
             isLoading = false,
             unitSystemType = UnitSystemType.METRIC
         )
@@ -445,7 +445,7 @@ fun ForecastInfoPreview() {
 fun ForecastDayPreview() {
     MrWeatherTheme {
         ForecastDay(
-            dailyForecast = PreviewObjects.fiveDaysForecast[0],
+            dailyForecast = PreviewObjects.Forecast.fiveDaysForecast[0],
             unitSystemType = UnitSystemType.METRIC
         )
     }
